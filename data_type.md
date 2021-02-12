@@ -27,6 +27,8 @@ http://tw.gitbook.net/c_standard_library/limits_h.html
 ## 2. 位移運算
 位移運算僅能使用於整數型別的數值。由於電腦儲存數值的方式，可知該整數型別往右位移`>>`即為除二，最左邊自動補 0，反之`<<`為乘二，最右邊自動補 0。
 
-範例： a****8 --> a<<3 (a連續乘 2 三次)，a*9 = a*(8+1) = a*8 + a --> a = a << 3 + a
+範例： a×8 --> a<<3 (a 連續乘 2 三次)，a×9 = a×(8+1) = a×8 + a --> a = a << 3 + a
 
 ## 3. 浮點數
+在 IEEE 統一浮點數表示法前，有許多種浮點數表示法，現在統一為科學記號表示法，對於任意數 x = *fraction × 2^exponent* = *fraction × 10^exponent*。而浮點數最少為 32 bits，其中最左邊為正負號，接下來從左第二位到第九位為指數部分，剩下為有效位數，轉成十進位後有效位數為 7 位。
+![image](https://en.wikipedia.org/wiki/File:Float_example.svg)
