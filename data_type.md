@@ -8,5 +8,6 @@ C 是較早就發展出來的語言，早期的記憶體容量沒有很大，故
 | 整數 int_16t | short int | –2^15 ~ 2^15 – 1 | 2 |
 | 長整數 int_32t | int | –2^31 ~ 2^31 – 1 | 4 |
 | 超長整數 int_64t | long int | –2^63 ~ 2^63 – 1 | 8 |
+
 註：不同的標準與編譯器也許與上述不同，可使用 limit.h 確認
 http://tw.gitbook.net/c_standard_library/limits_h.html
