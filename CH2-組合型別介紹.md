@@ -24,22 +24,23 @@ int c[4][4] = {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};  /
 * 定義新的資料類別
 因為結構內有多種不同類別的資料，故我們需要用 `struct` 這關鍵字來宣告，且結構內不同的資料型別以`;分號`隔開，並先定義此資料類別的名稱與內容物，內容物我們稱為成員(member)。
 ```
-struct competitor
+struct student
 {
     char birthday[7];
     int id;
     float score;
 };
 ```
+此結構內的成員共佔了 7+4+4 = 15 bytes 的記憶體，但因記憶體對齊的緣故，總共佔了 16 bytes 的記憶體。
 
 * 宣告與賦值
-struct competitor 為一種新定義的資料類別，裡面包含了一個字串陣列，名稱是 birthday，整數變數，名稱是 id，浮點數變數，名稱是 score。接著我們就可以宣告新的類別變數
+struct student 為一種新定義的資料類別，裡面包含了一個字串陣列，名稱是 birthday，整數變數，名稱是 id，浮點數變數，名稱是 score。接著我們就可以宣告新的類別變數
 ```
-struct competitor peter;
+struct student peter;
 ```
 也可以在定義完後直接宣告
 ```
-struct competitor
+struct student
 {
     char birthday[7];
     int id;
@@ -113,3 +114,39 @@ peter.birthday[1] = ‘9’;
 peter.birthday[5] = ‘9’;
 peter.birthday[6] = ‘\0’;
 ```
+# 3. 聯合 Union
+* 介紹
+在早期記憶體容量僅有 KB 甚至 MB，故對於記憶體的使用很嚴格(僅能用 < 10 KB 的量)。即便到了現在仍有許多攜帶式儀器，如運動手環對於記憶體用量要求很嚴格，或是在傳封包時只能一次傳 1 byte，但是要傳浮點數出來，此時 Union 就是一個很好的選擇。然而 Union 不論是定義、宣告或成員賦值，基本上只要將 struct 關鍵字改為`union`，其餘都跟結構完全一樣。當定義好內部成員後，編譯器會找出佔最大記憶體的成員來當作此類別的記憶體使用量。也因為內部成員占用同一區段的記憶體，故`內部成員不能同時取用`。
+```
+union student
+{
+    char birthday[7];
+    int id;
+    float score;
+}peter;
+```
+上述 union 中占最大記憶體的變數為`char birthday[7]`，但因為記憶體對齊的緣故，此類別佔了 8 bytes。
+![image](union.jpg)
+
+# 4. 列舉 enum
+* 介紹
+列舉是一種可以將文字直接轉成數字的資料結構，不論內部成員有幾個，所佔的記憶體量皆與 int 相同，也就是 4 bytes。若沒有特別給值，其內部成員由上而下分別為 0, 1, 2, ...，若有，則從有給值的數值後 +1。**沒有巢狀列舉**
+
+* 宣告與賦值
+其宣告方式與 struct 類似，但是內部成員不需要給型別，且成員名稱在同一個`可視範圍內不能重複`，故通常會以全域變數宣告。
+```
+enum id {
+    Mary,
+    Peter,
+    Lucas,
+};
+```
+在上述例子中，定義了一個列舉型別，其成員有 Mary (= 0), Peter (= 1), Lucas (= 2)。
+```
+enum id {
+    Mary = 11,
+    Peter,
+    Lucas,
+};
+```
+在上述例子中，定義了一個列舉型別，其成員有 Mary (= 11), Peter (= 12), Lucas (= 13)。
