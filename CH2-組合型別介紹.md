@@ -49,11 +49,11 @@ struct competitor
 上面這段宣告了 peter 這個變數，類別為 struct competitor。而結構內變數賦值可以在一開始宣告時就直接給，也可以宣告完後再給。在宣告時各成員用分號分開，但是賦值時以`,逗號`分開，其賦值方式有以下幾種：
 1. 照順序給值
 ```
-struct competitor peter = {“890229", 10039, 88.88};
+struct student peter = {“890229", 10039, 88.88};
 ```
 2. 照成員名稱給值(不須照順序)
 ```
-struct competitor peter = 
+struct student peter = 
 {
     .id = 10039,
     .birthday = “890229",
@@ -62,7 +62,7 @@ struct competitor peter =
 ```
 3. 一個一個給值
 ```
-struct competitor peter;
+struct student peter;
 peter.id = 10039;
 peter.score = 88.88;
 peter.birthday[0] = ‘8’;
@@ -73,4 +73,43 @@ peter.birthday[1] = ‘9’;
 peter.birthday[5] = ‘9’;
 peter.birthday[6] = ‘\0’;
 ```
+* 巢狀結構
+當定義了新的變數類別後，也能夠在結構內宣告一個結構，即為巢狀結構。
+```
+struct score {
+    int rank;
+    float point;
+};
 
+struct student {
+    char birthday[7];
+    int id;
+    struct score math;
+};
+```
+賦值方式如下：
+```
+struct competitor peter = {“890229", 10039, {3, 88.88}};
+```
+```
+struct student peter = 
+{
+    .id = 10039,
+    .birthday = “890229",
+    .math.rank = 3,
+    .math.point = 88.88,
+};
+```
+```
+struct student peter;
+peter.id = 10039;
+peter.point = 88.88;
+peter.math.rank = 3;
+peter.birthday[0] = ‘8’;
+peter.birthday[1] = ‘9’;
+.
+.
+.
+peter.birthday[5] = ‘9’;
+peter.birthday[6] = ‘\0’;
+```
