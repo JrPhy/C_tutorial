@@ -8,7 +8,7 @@
 
 * 宣告與賦值
 如同基本型別，其宣告須給定型別但不需一開始就給值。而陣列因有許多元素，故會使用 `大括號{ ... }` 將其包起來，在二維陣列中則會用 `{{ ... }}` 。
-```
+```C
 float y[5];
 int a[10] = {0};  //將所有元素設為 0
 int b[] = {0, 1, 2, 3};  //元素由 0~3 依序為 0, 1, 2, 3，其長度為 4
@@ -23,7 +23,7 @@ int c[4][4] = {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};  /
 
 * 定義新的資料類別
 因為結構內有多種不同類別的資料，故我們需要用 `struct` 這關鍵字來宣告，且結構內不同的資料型別以`;分號`隔開，並先定義此資料類別的名稱與內容物，內容物我們稱為成員(member)。
-```
+```C
 struct student
 {
     char birthday[7];
@@ -35,11 +35,11 @@ struct student
 
 * 宣告與賦值
 struct student 為一種新定義的資料類別，裡面包含了一個字串陣列，名稱是 birthday，整數變數，名稱是 id，浮點數變數，名稱是 score。接著我們就可以宣告新的類別變數
-```
+```C
 struct student peter;
 ```
 也可以在定義完後直接宣告
-```
+```C
 struct student
 {
     char birthday[7];
@@ -49,11 +49,11 @@ struct student
 ```
 上面這段宣告了 peter 這個變數，類別為 struct competitor。而結構內變數賦值可以在一開始宣告時就直接給，也可以宣告完後再給。在宣告時各成員用分號分開，但是賦值時以`,逗號`分開，其賦值方式有以下幾種：
 1. 照順序給值
-```
+```C
 struct student peter = {“890229", 10039, 88.88};
 ```
 2. 照成員名稱給值(不須照順序)
-```
+```C
 struct student peter = 
 {
     .id = 10039,
@@ -62,7 +62,7 @@ struct student peter =
 };
 ```
 3. 一個一個給值
-```
+```C
 struct student peter;
 peter.id = 10039;
 peter.score = 88.88;
@@ -76,7 +76,7 @@ peter.birthday[6] = ‘\0’;
 ```
 * 巢狀結構
 當定義了新的變數類別後，也能夠在結構內宣告一個結構，即為巢狀結構。
-```
+```C
 struct score {
     int rank;
     float point;
@@ -89,10 +89,10 @@ struct student {
 };
 ```
 賦值方式如下：
-```
+```C
 struct competitor peter = {“890229", 10039, {3, 88.88}};
 ```
-```
+```C
 struct student peter = 
 {
     .id = 10039,
@@ -101,7 +101,7 @@ struct student peter =
     .math.point = 88.88,
 };
 ```
-```
+```C
 struct student peter;
 peter.id = 10039;
 peter.point = 88.88;
@@ -117,7 +117,7 @@ peter.birthday[6] = ‘\0’;
 # 3. 聯合 Union
 * 介紹
 在早期記憶體容量僅有 KB 甚至 MB，故對於記憶體的使用很嚴格(僅能用 < 10 KB 的量)。即便到了現在仍有許多攜帶式儀器，如運動手環對於記憶體用量要求很嚴格，或是在傳封包時只能一次傳 1 byte，但是要傳浮點數出來，此時 Union 就是一個很好的選擇。然而 Union 不論是定義、宣告或成員賦值，基本上只要將 struct 關鍵字改為`union`，其餘都跟結構完全一樣。當定義好內部成員後，編譯器會找出佔最大記憶體的成員來當作此類別的記憶體使用量。也因為內部成員占用同一區段的記憶體，故`內部成員不能同時取用`。
-```
+```C
 union student
 {
     char birthday[7];
@@ -134,7 +134,7 @@ union student
 
 * 宣告與賦值
 其宣告方式與 struct 類似，但是內部成員不需要給型別，且成員名稱在同一個`可視範圍內不能重複`，故通常會以全域變數宣告。
-```
+```C
 enum id {
     Mary,
     Peter,
@@ -142,7 +142,7 @@ enum id {
 };
 ```
 在上述例子中，定義了一個列舉型別，其成員有 Mary (= 0), Peter (= 1), Lucas (= 2)。
-```
+```C
 enum id {
     Mary = 11,
     Peter,
