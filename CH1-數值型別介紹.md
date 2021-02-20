@@ -33,7 +33,6 @@ http://tw.gitbook.net/c_standard_library/limits_h.html
 在 IEEE 統一浮點數表示法前，有許多種浮點數表示法，現在統一為科學記號表示法，對於任意數 x = *fraction × 2^exponent* ~ *fraction × 10^exponent*。而浮點數最少為 32 bits，其中最左邊為正負號，接下來從左第二位到第九位為指數部分，剩下的 23 bits 為有效位數，轉成十進位後有效位數為 **7** 位。因為浮點數的表示法，**故電腦中的浮點數表示的整數跟整數不一定相同**。
 
 https://en.wikipedia.org/wiki/Floating-point_arithmetic#Internal_representation
-![image](float.jpg)
 
 ## 4. 宣告變數
 由於數值型別有許多種，且每種所佔的記憶體與使用方式也不同，故我們在給變數時要一併把其型別給清楚才能讓電腦知道。在**宣告變數時不一定要給值**，可以在程式執行中在給值。但若沒有在宣告時給值，因為所占用的記憶體也不一定為 0，故可能還是有其他亂數。
