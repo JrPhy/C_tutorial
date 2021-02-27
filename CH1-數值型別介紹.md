@@ -36,7 +36,7 @@ https://en.wikipedia.org/wiki/Floating-point_arithmetic#Internal_representation
 
 ## 4. 宣告變數
 由於數值型別有許多種，且每種所佔的記憶體與使用方式也不同，故我們在給變數時要一併把其型別給清楚才能讓電腦知道。在**宣告變數時不一定要給值**，可以在程式執行中在給值。但若沒有在宣告時給值，因為所占用的記憶體也不一定為 0，故可能還是有其他亂數。
-```
+```C
 int i, j = 0;
 float pi = 3.14159f;
 double e = 2.718281828;
