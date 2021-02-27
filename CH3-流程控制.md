@@ -1,6 +1,6 @@
 電腦的發明讓許多簡單且需要重複的工作可以交給電腦做，而在 C 語言中有以下關鍵字來執行流程控制
 ```C
-for, do-while, if-else, switch-case-defaul, goto, continue, break
+for, do-while, if-else, switch-case-default, goto, continue, break
 ```
 ## 1. 迴圈
 迴圈是一種會重複執行某段敘述的流程控制，C 語言中的迴圈有 for 與 do-while，以下分別介紹
