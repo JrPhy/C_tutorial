@@ -1,4 +1,6 @@
 在任何程式語言中，若有一段程式碼會常常使用，我們會將其另外抽出來，並在需要的地方呼叫他，抽出來的部分即為函數。函數的結構如下
+
+## 1. 傳入與回傳基本型別
 ```
 回傳值型別 函數名稱(引數1, 引數2, ...)
 {
@@ -25,3 +27,25 @@ float fadd(float a, float b)
 float pi = 3.14f, e = 2.7182f, result;
 result = add(pi, e) //傳入時就會失去精度，如果再作除法也會在失去一次精度
 ```
+## 2. 傳入與回傳組合型別
+除了傳入與回傳基本型別，也可以傳入與回傳組合型別，以結構為例：
+```C
+struct student
+{
+    char birthday[7];
+    int id;
+    float score;
+}peter;
+
+struct student assign(struct student name)
+{
+    name.birthday = "811111";
+    name.id = 15;
+    name.score = 84.7f;
+    return name;
+}
+
+struct student peter;
+peter = assign(peter);
+```
+上述函數傳入一個結構，並回傳一個結構。
