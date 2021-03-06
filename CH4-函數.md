@@ -84,4 +84,21 @@ as they are local to the function in which they are declared):
 int main(int argc, char *argv[]) { /* ... */ }
 or equivalent;9) or in some other implementation-defined manner.
 ```
-其中 int main(void) 可直接在 IDE 上執行，int main(int argc, char * argv[])則是
+其中 int main(void) 可直接在 IDE 上執行，int main(int argc, char * argv[])則是在命令列上使用，例如
+```C
+int main(int argc, char *argv[]) {
+    printf("We have %d arguments:\n", argc);
+    for (int i = 0; i < argc; ++i) 
+    {
+        printf("[%d] %s\n", i, argv[i]);
+    }
+    return 0;
+}
+```
+當在命令列上輸入 ./a.out JRphy 後會得到
+```
+"We have 2 arguments:"
+[0] ./a.out
+[1] JRphy
+```
+而回傳是整數型別可以讓你判斷程式是否成功執行，一般程式中回傳為 0 表示成功執行，其他整數則會有其他意義。
