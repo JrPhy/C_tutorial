@@ -18,4 +18,24 @@ int main()
     return 0;
 }
 ```
-也可將函數原型先宣告於 main 之前，在將函數的詳細內容寫在 main 之後。此時當
+也可將函數原型先宣告於 main 之前，在將函數的詳細內容寫在 main 之後。此時當 main 函式中呼叫到你所宣告的函數名稱時，就會去往下找他的實做方式
+```C
+int max(int a, int b);
+
+int main()
+{
+    int array[] = {6, 4, 9, -1, 5, 8, 11, -3};
+    int value = -9999, i;
+    for(i = 0; i < 8; i++)
+    value = max(value, array[i]);
+    printf("%d\n", value);
+    return 0;
+}
+
+int max(int a, int b)
+{
+    if(a >= b) return a;
+    else return b;
+}
+```
+在多人開發或大型程式開發實，會建議先將函數原型宣告出來，並在 main 函數後實作，因為有可能函數 A 需要呼叫到函數 B，但是 B 函數的實作在 A 之前，若是用第一種方式則會報錯，而且也不清楚這一支程式中有那些函式。因此若是將函式的原型先宣告在 main 之前除了無關順序外，也可以讓讀者容易了解這隻程式使用到了哪些函數及其原型。
