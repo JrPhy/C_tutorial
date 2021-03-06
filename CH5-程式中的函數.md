@@ -4,6 +4,7 @@ main 以外，需要呼叫時就可以重複使用。
 在 C 語言中將函式提到 main 外面的寫法有以下兩種。假設我們要寫一函數找出一陣列中的最大值，因為程式碼是從上面往下走，我們可以將所要使用到的函數寫在 
 main 函數之前
 ```C
+#include<stdio.h>
 int max(int a, int b)
 {
     if(a >= b) return a;
@@ -22,6 +23,7 @@ int main()
 ```
 也可將函數原型先宣告於 main 之前，在將函數的詳細內容寫在 main 之後。此時當 main 函式中呼叫到你所宣告的函數名稱時，就會去往下找他的實做方式
 ```C
+#include<stdio.h>
 int max(int a, int b);
 
 int main()
