@@ -9,7 +9,7 @@ int max(int a, int b)
     if(a >= b) return a;
     else return b;
 }
-
+ 
 int main()
 {
     int array[] = {6, 4, 9, -1, 5, 8, 11, -3};
