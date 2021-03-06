@@ -57,7 +57,31 @@ void pass(int a)
     printf("%d\n", a);
 }
 ```
-若是函數完全不需要傳入引數，則在引數的部分輸入 void，若是留下空白則表示無限定引數個數。
+若是函數完全不需要傳入引數，則在引數的部分輸入 void，若是留下空白則表示不限定引數個數。
+```C
+void pass1(void)
+{
+    printf("%d\n", a);
+}
 
+void pass2()
+{
+    printf("%d\n", a);
+}
+int n = 19
+pass1(n);  //編譯器會報錯
+pass2(n);  //編譯器不會報錯且可正常執行，會印出 10
+```
 ## 3. main 函數
-main 函數算是一個比較特別的函數，這個函數告訴程式主體從這裡開始執行，然後
+main 函數算是一個比較特別的函數，這個函數告訴程式主體從這裡開始執行，在其他語言中雖然有不同的形式，但是名稱都是 main。而在 C 語言中 main 函式的原型雖然網路上有好幾種，但是在 C 的標準規格書中明定只有兩種
+```
+5.1.2.2.1 Program startup
+1 The function called at program startup is named main. The implementation declares no prototype for this function. 
+It shall be defined with a return type of int and with no parameters:
+int main(void) { /* ... */ }
+or with two parameters (referred to here as argc and argv, though any names may be used, 
+as they are local to the function in which they are declared):
+int main(int argc, char *argv[]) { /* ... */ }
+or equivalent;9) or in some other implementation-defined manner.
+```
+其中 int main(void) 可直接在 IDE 上執行，int main(int argc, char * argv[])則是
