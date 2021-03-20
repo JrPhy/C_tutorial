@@ -78,4 +78,21 @@ int x = 5.5f; // x = 5 (隱示轉換)
 ```
 但是並非所有情況編譯器都會做轉換，例如兩個整數型別相除仍為整數，結果會失去精度。double 轉 float (失去精度) 轉 int (捨去小數，無條件捨去)，int 轉 short int (注意溢位)，故建議要轉型都以顯示轉型為主。  
 而相對於變數，多數情況指標轉型必須先轉成泛型指標後再轉成另外一種指標。
+```C
+void *void_ptr;
+int a = 10;
+float pi = 3.14f; 
+char c = 'p';
+void_ptr = &a;  //OK
+void_ptr = &pi; //OK
+void_ptr = &c;  //OK
+```
 ![image](pic/void_ptr.jpg)
+而泛型指標類似一個容器，此指標只能拿來裝東西，不能直接使用
+```C
+int n = 1;
+void *void_ptr;
+void_ptr = &n;
+*void_ptr = *void_ptr +1;  //這行會報錯
+*(int *)void_ptr = *(int *)void_ptr + 1;  //轉換成整數指標再取值計算
+```
