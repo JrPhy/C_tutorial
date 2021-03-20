@@ -146,3 +146,22 @@ void* bsearch (const void* key, const void* base, size_t num, size_t size, int (
 // If the item is not in the array, then it return NULL.
 ```
 可看到這兩個函數是用比較函數來模擬泛型，但是比較函數的型別是根據 * base 的型別，故只是**模擬**。在這兩個算法中剛好都是要兩兩比較，所以這兩個函數的比較函數可以使用同一個。
+
+## 6. 動態記憶體配置
+C 語言並沒有像其他高階語言一樣不用管記憶體，但這也是 C 語言能夠保留這麼久的原因，越接近機器層的語言就能夠執行的越快。在 C 語言中給變數只用的記憶體有兩種：stack 和 heap，其中 stack 的大小約只有 4 MB/8 MB(預設值，可調整)，而 heap 則是電腦硬體 RAM 多大就可用多大。
+
+## 7. 字串
+在 C 中並沒有真正的字串，而是由字元陣列組成。在一些高階語言中字串與字元一樣，在 C 中若用 '' 包起來為字元，""包起來為字串。每個字串都會有個結束符號'/0'，也因為美個字串都有這個符號，故傳一字串陣列進入某函數中，可以不用傳其大小也能夠算得出來。字串的宣告方式有以下幾種
+```C
+char string1[] = "Hello World";   // 1, strlen(string1) = 11, sizeof(string1) = 12
+char *string2 = "Hello World";    // 2, strlen(string1) = 11, sizeof(string1) = 4
+char string3[12] = "Hello World"; // 3, strlen(string1) = 11, sizeof(string1) = 12
+string3[0] = 'H';
+string3[1] = 'e';
+string3[2] = 'l';
+...
+string3[11] = '/0';
+```
+其中第一種與第三種完全一樣，只是一個是直接初始化，一個為個別元素初始化。而第二種則是先開了一個指標，這個指標指向一個字串，這個例子也說明指標與陣列是不一樣的東西。  
+故若是使用第二種方式，沒有辦法更動裡面的元素，但是可以更改為不同長度的字串，而第一種方式則是沒有辦法直接更改整個字串，必須每個字元去做修改。  
+而在 C 語言中有關於 string 的函數可使用 <string.h>。
