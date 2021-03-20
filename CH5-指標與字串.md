@@ -96,3 +96,53 @@ void_ptr = &n;
 *void_ptr = *void_ptr +1;  //這行會報錯
 *(int *)void_ptr = *(int *)void_ptr + 1;  //轉換成整數指標再取值計算
 ```
+
+## 4. 空指標常數 (void*)0
+一般變數如果沒有馬上使用的話，通常會先將該變數初始化為 0，而指標也一樣，通常來說一指標也會初始化，指標的 0 稱為**空指標常數**，為 (void*)0。在 C 中 (void*)0 有另外定義為 NULL，可引用以下標準函式庫
+`<stddef.h> <stdlib.h> <string.h> <wchar.h> <time.h> <locale.h> <stdio.h>`  
+```C
+void *ptr = NULL; 
+int *p  = NULL; // int *p = (void*)0, 
+char *cp = NUL; // char *cp = '\0' the ASCII code is 0.
+float *flp = NULL; // int *p = (float*)0
+```
+
+## 5. 模擬泛型函數
+C 語言雖然不是物件導向的語言，也就是**沒有內建**物件導向的功能，但是可以用 C 的特性來模擬泛型(多型)函數。在物件導向的語言中，泛型函數的用途之一就是相同功能的函數最好都是用同一個介面。而 C 語言中函數引數型別與回傳型別必須明確，但可以使用泛型指標來傳入任意型別，然後在函數內轉型，回傳值也能用相同的手法。在此我們以標準函式庫中的 qsort 與 bsearch 當作範例
+```C
+#include <stdlib.h>
+
+int compare(const void * a, const void * b)
+{
+    return *(int *)a > *(int *)b ? 1 : -1;
+    //if (*(int *)a > *(int *)b ) return 1;
+    //else return -1;
+}
+
+int main(){
+    int values[] = {-1, 3, 40, 3, -6, -13, -7, 0, 11, -5};
+    int *pItem, key = 40, *ip, elem;
+    qsort(values, 10, sizeof(int), compare);
+    pItem = (int*) bsearch(&key, values, 10, sizeof(int), compare);
+    if(pItem != NULL) elem = ip – values; //pointer arithmatics 
+    return 0;
+}
+```
+在此例子中，如果一陣列示尚未排序過，則應直接用一個迴圈來找，在此指示要說明兩個函數可使用同一個比較函數才會這樣做。其中 qsort 與 bsearch 的引數與意義介紹如下
+```C
+void qsort(void* base, size_t nitems, size_t size, int (*compare)(const void*, const void*));
+// *base: an array waited for soring.
+// nitems: number of element in array.
+// size: size of each element in the array.
+// compare: > 0 for ascend, < 0 for descend.
+// It’s an in-place version.
+
+void* bsearch (const void* key, const void* base, size_t num, size_t size, int (* compare)(const void*,const void*));
+// *key: the item you want to find
+// *base: an array waited for searching.
+// num: number of element in array.
+// size: size of each element in the array.
+// compare: > 0 for ascend, < 0 for descend.
+// If the item is not in the array, then it return NULL.
+```
+可看到這兩個函數是用比較函數來模擬泛型，但是比較函數的型別是根據 * base 的型別，故只是**模擬**。在這兩個算法中剛好都是要兩兩比較，所以這兩個函數的比較函數可以使用同一個。
