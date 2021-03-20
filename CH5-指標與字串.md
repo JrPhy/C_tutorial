@@ -101,7 +101,7 @@ void_ptr = &n;
 一般變數如果沒有馬上使用的話，通常會先將該變數初始化為 0，而指標也一樣，通常來說一指標也會初始化，指標的 0 稱為**空指標常數**，為 (void*)0。在 C 中 (void*)0 有另外定義為 NULL，可引用以下標準函式庫
 `<stddef.h> <stdlib.h> <string.h> <wchar.h> <time.h> <locale.h> <stdio.h>`  
 ```C
-void *ptr = NULL; 
+void *ptr = NULL; 
 int *p  = NULL; // int *p = (void*)0, 
 char *cp = NUL; // char *cp = '\0' the ASCII code is 0.
 float *flp = NULL; // int *p = (float*)0
