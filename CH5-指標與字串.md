@@ -148,14 +148,39 @@ void* bsearch (const void* key, const void* base, size_t num, size_t size, int (
 可看到這兩個函數是用比較函數來模擬泛型，但是比較函數的型別是根據 * base 的型別，故只是**模擬**。在這兩個算法中剛好都是要兩兩比較，所以這兩個函數的比較函數可以使用同一個。
 
 ## 6. 動態記憶體配置
-C 語言並沒有像其他高階語言一樣不用管記憶體，但這也是 C 語言能夠保留這麼久的原因，越接近機器層的語言就能夠執行的越快。在 C 語言中給變數用的記憶體主要有兩部分：stack 和 heap，其中 stack 的大小約只有 4 MB/8 MB(預設值，可調整)，而 heap 則是電腦硬體 RAM 多大就可用多大 (x86 可能只有 2 GB ~ 4 GB)。在使用動態記憶體配置需先引入 <stdlib.h>，並使用 malloc (只配置不初始化) 或 calloc (配置並初始化每個元素為 0) 函數，並搭配 free 使用，若使用完沒有 free，則會造成記憶體洩漏(memory leak)。下列範例使用 calloc 分別配置一維與多維動態記憶體。 
+C 語言並沒有像其他高階語言一樣不用管記憶體，但這也是 C 語言能夠保留這麼久的原因，越接近機器層的語言就能夠執行的越快。在 C 語言中給變數用的記憶體主要有兩部分：stack 和 heap，其中 stack 的大小約只有 4 MB/8 MB(預設值，可調整)，而 heap 則是電腦硬體 RAM 多大就可用多大 (x86 可能只有 2 GB ~ 4 GB)。在使用動態記憶體配置需先引入 <stdlib.h>，並使用 malloc (只配置不初始化) 或 calloc (配置並初始化每個元素為 0) 函數，並搭配 free 使用，若使用完沒有 free，則會造成記憶體洩漏(memory leak)。下列範例使用 calloc 分別配置一維與多維動態記憶體，若是記憶體不足，則會配置失敗並回傳 NULL。
 ```C
-int *p = calloc(1000, sizeof(int));  //like int p[1000] = {0};
+int *p = calloc(1000, sizeof(int));  //似 int p[1000] = {0};
+if (p == NULL)
+{
+    puts("Memory allocation failed.");  //可能是記憶體不足
+    exit(EXIT_FAILURE);  //直接中斷程式，不會進行 free
+}
+free(p);
+
+int **p = calloc(1000, sizeof(int*)); 
+if (p == NULL)
+{
+    puts("Memory allocation failed.");  //可能是記憶體不足
+    exit(EXIT_FAILURE);  //直接中斷程式，不會進行 free
+}
+for(int i = 0; i < 2; i++) 
+{
+    p[i] = calloc(2, sizeof(int));
+    if (p == NULL)
+    {
+        puts("Memory allocation failed.");  //可能是記憶體不足
+        exit(EXIT_FAILURE);  //直接中斷程式，不會進行 free
+    }
+}
+//似 int p[1000][2] = {0}，故二維陣列應稱為「陣列的陣列」，雙指標應稱為「指標的指標」
+for(int i = 0; i < 2; i++) free(p[i]);
 free(p);
 ```
+多維陣列的動態分配可仿照二維陣列的方式實作。
 
 ## 7. 字串
-在 C 中並沒有真正的字串，而是由字元陣列組成。在一些高階語言中字串與字元一樣，在 C 中若用 '' 包起來為字元，""包起來為字串。每個字串都會有個結束符號'/0'，也因為美個字串都有這個符號，故傳一字串陣列進入某函數中，可以不用傳其大小也能夠算得出來。字串的宣告方式有以下幾種
+在 C 中並沒有真正的字串，而是由字元陣列組成。在一些高階語言中字串與字元一樣，在 C 中若用 '' 包起來為字元，""包起來為字串。每個字串都會有個結束符號'/0'，也因為每個字串都有這個符號，故傳一字串陣列進入某函數中，可以不用傳其大小也能夠算得出來。字串的宣告方式有以下幾種
 ```C
 char string1[] = "Hello World";   // 1, strlen(string1) = 11, sizeof(string1) = 12
 char *string2 = "Hello World";    // 2, strlen(string1) = 11, sizeof(string1) = 4
