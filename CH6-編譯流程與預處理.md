@@ -1,11 +1,49 @@
 C 語言是一種編譯語言，也就是程式設計師寫完程式後需要經過編譯器，將所寫的程式轉成電腦看得懂的語言，可以算是將人類的語言轉譯。而編譯流程主要分以下四個階段：
 1. 預處理
    將以下關鍵字做字串取代或是邏輯分析\
-   #if, #elif, #else, #endif, #define, #include, #pragma, #ifdef, #ifndef. 
+   #define, #include, #if, #elif, #else, #endif, #ifdef, #ifndef, #pragma. 
 2. 彙編\
    做詞意分析、語意分析、語法分析，中間程式碼產生，最佳化程式碼。不同的編譯器會有不同的邏輯，錯的理由也不盡相同。
 3. 組語\
    轉成組合語言並生成 .o
 4. 連結/建立\
    將所有的 .o 檔連接起來成為一個 .dll/.so/.exe
+   
+在程式中編譯器遇到以上預處理的字串，會先對那些字串做展開或條件編譯。
 
+## 1. #define
+在 C 語言中使用 #define 來取代程式中所有相同的文字，若是相同預取代字串出現兩次，則以後面的為主，且最後不用分號。\
+#define 預處理字串 要取代成的字串
+```C
+#include<stdio.h>
+#define SIZE 8
+#define SIZE 10
+int main()
+{
+   printf("SIZE = %d", SIZE); 
+   return 0;
+}
+```
+而 #define 也很適合拿來寫一些非常短的函數，例如
+```C
+#define CUBIC(x) (x)*(x)*(x) 
+```
+因為此僅為字串取代，所以並沒有限定傳入的變數型別，因此可以利用 #define 來實現 C 語言中的泛型函數。\
+若是要利用 #define 來寫函數，則每個變數盡量都要括號，不然會因算子的優先序而跑出非預期結果。
+```C
+#define CUBIC1(x) (x)*(x)*(x) 
+#define CUBIC2(x) x*x*x
+#include<stdio.h>
+int main()
+{
+   printf("CUBIC1 = %d, CUBIC2 = %d", CUBIC1(1+1), CUBIC2(1+1)); 
+   return 0;
+}
+```
+雖然兩個在預想中都是期待輸出某數的立方，但是經展開後會是以下結果\
+CUBIC1(1+1) = (1+1)* (1+1)* (1+1) = 8\
+CUBIC2(1+1) = 1+1* 1+1* 1+1 = 4\
+
+因為 #define 是做取代，故在程式執行上速度會稍微快，但是程式碼也會相對大，故必須自己做取捨。
+
+## 2. #
