@@ -84,8 +84,6 @@ struct data userObject ={165, 4.35, 23};
 當引入了 a.h 後，實際上在 a.c 的程式碼如下
 ```C
 #include <stdio.h>
-#ifndef A_H_
-#define A_H_
 
 int add(int a, int b);
 struct data {
@@ -93,7 +91,7 @@ struct data {
    float sp;
    int age;
 } userInfo;
-#endif
+
 int add(int a, int b)
 {
    printf("%d", a);
@@ -102,3 +100,10 @@ int add(int a, int b)
 struct data userObject ={165, 4.35, 23};
 ```
 在上述程式碼中有用 "" 及 <>，"" 為自定義的 .h，若與 .c 不在同一個資料夾中則需另外給明確路徑，<> 為標準函式庫的 .h，通常有預設路徑。
+
+## 3. 條件編譯
+在前一節中看到了 #ifndef A_H_ 與 #endif，此即告訴編譯器若沒有 A_H_ (及a.h) 這東西，則定義 a.h。好處是同一個 .h 不會被重複引用。而條件編譯包含了以下幾個
+```C
+#if, #elif, #else, #endif, #ifdef, #ifndef
+```
+前四個類似於程式中的 if-else 流程，而在預編譯中使用 #endif 來告訴編譯器條件編譯到這裡結束。
