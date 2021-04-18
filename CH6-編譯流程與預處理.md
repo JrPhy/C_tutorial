@@ -42,8 +42,63 @@ int main()
 ```
 雖然兩個在預想中都是期待輸出某數的立方，但是經展開後會是以下結果\
 CUBIC1(1+1) = (1+1)* (1+1)* (1+1) = 8\
-CUBIC2(1+1) = 1+1* 1+1* 1+1 = 4\
+CUBIC2(1+1) = 1+1* 1+1* 1+1 = 4
 
 因為 #define 是做取代，故在程式執行上速度會稍微快，但是程式碼也會相對大，故必須自己做取捨。
 
-## 2. #
+## 2. #include
+對大部分初學者來說，在 C 語言的第一隻程式應該就是在螢幕上印出 hello world，在此最上面就會使用到此預處理功能。
+```C
+#include<stdio.h>
+
+int main()
+{
+   printf("hello world");
+}
+```
+在大型程式開發時會將函數的宣告與實現方式分開，或是將變數的宣告與初始化方式分開，使得整體架構變得好管理。通常宣告都是寫在另外的 .h 中，時做與初始化則是寫在 .c 中，當在 .c 中 #include 某個 .h，則會將 .h 內的東西直接展開。
+a.h
+```C
+#ifndef A_H_
+#define A_H_
+
+int add(int a, int b);
+struct data {
+   int HR;
+   float sp;
+   int age;
+} userInfo;
+#endif
+```
+a.c
+```C
+#include <stdio.h>
+#include "a.h"
+int add(int a, int b)
+{
+   printf("%d", a);
+   return (a+b);
+}
+struct data userObject ={165, 4.35, 23};
+```
+當引入了 a.h 後，實際上在 a.c 的程式碼如下
+```C
+#include <stdio.h>
+#ifndef A_H_
+#define A_H_
+
+int add(int a, int b);
+struct data {
+   int HR;
+   float sp;
+   int age;
+} userInfo;
+#endif
+int add(int a, int b)
+{
+   printf("%d", a);
+   return (a+b);
+}
+struct data userObject ={165, 4.35, 23};
+```
+在上述程式碼中有用 "" 及 <>，"" 為自定義的 .h，若與 .c 不在同一個資料夾中則需另外給明確路徑，<> 為標準函式庫的 .h，通常有預設路徑。
