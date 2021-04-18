@@ -106,4 +106,17 @@ struct data userObject ={165, 4.35, 23};
 ```C
 #if, #elif, #else, #endif, #ifdef, #ifndef
 ```
-前四個類似於程式中的 if-else 流程，而在預編譯中使用 #endif 來告訴編譯器條件編譯到這裡結束。
+前四個類似於程式中的 if-else 流程，而在預編譯中使用 #endif 來告訴編譯器條件編譯到這裡結束。而 #ifdef 即為 #if define，#ifndef 即為 #if !define。\
+條件編譯的方法除了前面所提到的 .h 保護外，對於版本控制也是很方便的做法。
+```C
+#define VERSION 1
+
+#if VERSION == 1
+...
+#elif VERSION == 2
+...
+#else 
+...
+#endif
+```
+```
