@@ -2,7 +2,24 @@
 在 C 語言中用範圍(scope)，連結(linkage)，持續時間(duration) 以及 static 和 extern 關鍵字來控制變數的生命周即與可視範圍。
 ## 1. 範圍 scope
 C 語言中的範圍總共有以下四個
-### 1. 大括號   {}
-### 2. 函數引數 int add(int a, int b)
-### 3. 函數內容 int add(int a, int b) { ... }
-### 4. .c檔案
+#### 1. 大括號   {}
+#### 2. 函數引數 int add(int a, int b)
+#### 3. 函數內容 int add(int a, int b) { ... }
+#### 4. .c檔案
+若一個變數在函數以外，稱為全域變數(global variable)，反之則稱為區域變數(local variable)
+```C
+int a; // 全域變數
+swapi(int *a, int *b)
+{
+    int temp = *a; //區域變數
+    *a = *b;
+    *b = temp;
+}
+
+swapf(float *a, float *b)
+{
+    float temp = *a; //區域變數
+    *a = *b;
+    *b = temp;
+}
+```
