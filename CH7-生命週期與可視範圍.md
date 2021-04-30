@@ -1,2 +1,8 @@
 在每個系統與程式語言中，都有一套管理記憶體的方法。而越高階的語言(離硬體越遠)越不用煩惱記憶體，反之則要很小心。而 C 語言是非常靠近硬體的語言，在記憶體使用上的自由度非常高，但也會引發記憶體洩漏(Memory leak)的問題。\
-在 C 語言中用 scope，linkage，duration 以及 static 和 extern 關鍵字來控制變數的生命周即與可視範圍。
+在 C 語言中用範圍(scope)，連結(linkage)，持續時間(duration) 以及 static 和 extern 關鍵字來控制變數的生命周即與可視範圍。
+## 1. 範圍 scope
+C 語言中的範圍總共有以下四個
+### 1. 大括號   {}
+### 2. 函數引數 int add(int a, int b)
+### 3. 函數內容 int add(int a, int b) { ... }
+### 4. .c檔案
