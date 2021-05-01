@@ -107,3 +107,24 @@ C11 中提供了 Thread.h 這個標頭檔讓程式設計者可以更方便的使
 | 靜態內連結 | 靜態 | 檔案 | 內 | 在函數外且前面加 static |
 | 靜態無連結 | 靜態 | 區塊 | 無 | 在區域內且前面加 static |
 
+## 4. 關鍵字 static/extern
+#### 1. static
+由上可知 static 關鍵字除了改變區域變數的生命週期外，還將全域變數或是函數的可視範圍限縮在同一個檔案內。
+```C
+int a = 5; //預設是 extern，但若是要與其他檔案共用，建議還是加上 extern 關鍵字
+static int b = 3; //只能在此檔案中使用
+static int count(int a, int b); //只能在此檔案中使用
+int main()
+{
+      ...
+}
+static int count(int a, int b)
+{
+    static int c = 0; //生命週期與 a, b 相同
+    return c;
+}
+```
+#### 2. extern
+若是有其他的 .c 檔想要共用同一個變數或函數，則編譯器看到此關鍵字後會使用某一塊記憶體空間，並讓其他的 .o 檔來使用同一個變數或函數。
+a.c
+```
