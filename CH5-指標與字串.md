@@ -18,8 +18,7 @@ int *b;
 int c = 10;
 float pi = 3.14f;
 b = &c;  //OK
-b = &d;  //會報錯
-c = pi;
+b = &pi;  //會報錯
 ```
 
 ## 2. 指標與結構
