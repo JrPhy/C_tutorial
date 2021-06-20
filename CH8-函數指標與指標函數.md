@@ -1,1 +1,1 @@
-我們從前面幾章已知變數有一般變數 ```(int a;)``` 與指標變數 ```(int *a;)```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```(int add(int a, int b))```在此我們稱其為一般函數，而回傳指標的函數稱為 **指標函數**(pointer function)。
+我們從前面幾章已知變數有一般變數 ```(int a;)``` 與指標變數 ```(int *a;)```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```(int add(int a, int b))```在此我們稱其為一般函數。另一個指向函數的指標則稱為**函數指標**(function pointer or pointer to function) ```int (*compare)(const void*, const void*)```
