@@ -13,4 +13,11 @@ int func1(int, int); //一般函數
 int (*func1Ptr)(int, int); //指標函數
 ```
 #### 2. 規格書: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
-```A function designator is an expression that has function type. Except when it is the operand of the sizeof operator54) or the unary & operator,afunction designator with type ‘‘function returning type’’ is converted to an expression that has type ‘‘pointer to function returning type’’.```
+```A function designator is an expression that has function type. Except when it is the operand of the sizeof operator or the unary & operator, a function designator with type ‘‘function returning type’’ is converted to an expression that has type ‘‘pointer to function returning type’’.```
+function designator 就是 function 名稱，當函數名稱遇到 sizeof() 與取直算符 &，則會幫你轉成指標函數。例如
+```C
+int func1(int, int); //一般函數
+int (*func1Ptr)(int, int); //指標函數
+func1Ptr = &func1
+func1Ptr = func1
+```
