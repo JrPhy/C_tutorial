@@ -5,11 +5,12 @@
 
 ## 2. 指標函數
 如之前所提到，函數本身也佔有一記憶體位置與空間，故可以宣告一指標指向該函數的位置。
-### 1. 宣告
+#### 1. 宣告
 指標函數的宣告，除了與一般函數一樣需要回傳型別、函數名稱與傳入引數外，其名稱需括號並在前面加上星號代表該函數為指標函數
 ```C
 int a, *b; // a 為一般變數，b 為指標變數
 int func1(int, int); //一般函數
 int (*func1Ptr)(int, int); //指標函數
 ```
-### 2. 規格書
+#### 2. 規格書: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
+```A function designator is an expression that has function type. Except when it is the operand of the sizeof operator54) or the unary & operator,afunction designator with type ‘‘function returning type’’ is converted to an expression that has type ‘‘pointer to function returning type’’.```
