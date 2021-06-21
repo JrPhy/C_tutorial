@@ -9,6 +9,7 @@
 指標函數的宣告，除了與一般函數一樣需要回傳型別、函數名稱與傳入引數外，其名稱需括號並在前面加上星號代表該函數為指標函數
 ```C
 int a, *b; // a 為一般變數，b 為指標變數
-int func1(int a, int b); //一般函數
-int (*func1Ptr)(int a, int b); //指標函數
+int func1(int, int); //一般函數
+int (*func1Ptr)(int, int); //指標函數
 ```
+### 2. 規格書
