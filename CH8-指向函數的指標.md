@@ -5,7 +5,7 @@
 不過須注意如果回傳一陣列，若非用動態宣告而是靜態宣告，則因該宣告是 local variable，故回傳會有錯誤。
 
 ## 2. 指標函數
-如之前所提到，函數本身也佔有一記憶體位置與空間，故可以宣告一指標指向該函數的位置。
+如之前所提到，函數本身也佔有一記憶體位置與空間，故可以宣告一指標指向該函數的位置，指標函數本身仍為指標。
 #### 1. 宣告
 指標函數的宣告，除了與一般函數一樣需要回傳型別、函數名稱與傳入引數外，其名稱需括號並在前面加上星號代表該函數為指標函數，因指標宣告的星號 * 運算優先次序比用為函數參數列的小括弧為低。
 ```C
@@ -26,3 +26,26 @@ func1Ptr = func1
 當指標函數指向一函數後，即可像使用原函數一樣使用。須注意指標的型別，在此須多注意傳入的引數順序、引數型別與引數個數皆要與原函數相同。
 
 #### 3. 指標函數當作引數
+C 語言雖然不是物件導向的語言，但是 C 語言可以利用指標來達成物件導向的寫法。但是實際上是傳入一個指標，例如有一個函數 A，引數包含一個指標函數且指向 B，指標傳入後這個指標會指向 B 函數，所以傳入之後就能在 A 函數裡面指向 B 函數。在之前已經有了一個例子，例如在標準函式庫中的 qsort 與 bsearch
+```C
+int compare(const void * a, const void * b)
+{
+    return *(int *)a > *(int *)b ? 1 : -1;
+}
+
+void qsort(void* base, size_t nitems, size_t size, int (*compare)(const void*, const void*));
+// *base: an array waited for sorting.
+// nitems: number of element in array.
+// size: size of each element in the array.
+// compare: > 0 for ascend, < 0 for descend.
+// It’s an in-place version.
+
+void* bsearch (const void* key, const void* base, size_t num, size_t size, int (*compare)(const void*,const void*));
+// *key: the item you want to find
+// *base: an array waited for searching.
+// num: number of element in array.
+// size: size of each element in the array.
+// compare: > 0 for ascend, < 0 for descend.
+// If the item is not in the array, then it return NULL.
+```
+在 qsort 與 bsearch 中的最後一個引數即為指標函數，這個指標函數是回傳一個整數，並傳入兩個唯讀的泛型指標。這個指標函數傳入之後，會把另外傳入的泛型指標 base 裡面的東西丟進去做比較。如同變數一樣，當我們宣告變數後，這個變數即有了名稱、位置與數值，所以雖然我們是宣告一個一般函數，還是可以傳入一個指標函數。
