@@ -127,7 +127,7 @@ int main(){
     return 0;
 }
 ```
-在此例子中，如果一陣列示尚未排序過，則應直接用一個迴圈來找，在此指示要說明兩個函數可使用同一個比較函數才會這樣做。其中 qsort 與 bsearch 的引數與意義介紹如下
+在此例子中，如果一陣列示尚未排序過，則應直接用一個迴圈來找，在此只是要說明兩個函數可使用同一個比較函數才會這樣做。其中 qsort 與 bsearch 的引數與意義介紹如下
 ```C
 void qsort(void* base, size_t nitems, size_t size, int (*compare)(const void*, const void*));
 // *base: an array waited for soring.
