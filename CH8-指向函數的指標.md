@@ -70,7 +70,7 @@ userInfo peter;//== struct data peter
 rv b, c;       //== const int* b, c; b 指標，c 為變數 (等同 rp c;)，其值皆不可改變
 const iptr d;  //== const int d; 在此先宣告了一個整數指標 d，並將此指標位置設為唯讀
 ```
-同樣的，在指標函數這種很長的宣告我們也可以將其縮寫，不過因為指標函數會牽涉到許多括號與星號，故建議先看以下網址https://magicjackting.pixnet.net/blog/post/60889356，再看範例。\
+同樣的，在指標函數這種很長的宣告我們也可以將其縮寫，不過因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例https://magicjackting.pixnet.net/blog/post/60889356
 ```C
 
 ```
