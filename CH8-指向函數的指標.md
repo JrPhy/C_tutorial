@@ -79,5 +79,42 @@ func1Ptr func;
 ```
 上述例子中 int (* )(int, int) 是一個型別，func1Ptr 是一個名稱，所以當指標函數搭配 typedef 使用後就可以讓整體程式碼看起來更簡潔。
 
-
+## 3. 呼叫 dll (動態函式庫)
+在 windows 很多應用程式中都會有包含 .dll 這個檔案，全名為 dynamic-link library。顧名思義當使用到的時候我們會去開一個記憶體位置，將該記憶體位置指向 .dll 裡面的函數拿出來使用，以下就給一個 C 語言呼叫 .dll 的方法。
+```C
+#include <stdio.h>
+#include <windows.h>  //此為呼叫 .dll 所需之標頭檔
+typedef struct
+{
+    int x;
+    int y;
+} Point;
+typedef void (*DLLshow_point)(Point point);
+typedef void (*DLLmove_point)(Point point);
+typedef void (*DLLmove_point_by_ref)(Point *point);
+typedef Point (*DLLget_point)(void);
+//在此我們必須先知道 .dll 裡面的函數原型長得如何，當然也可以不用 typedef，只是寫起來就比較冗長不易讀。
+HINSTANCE hDll;  //此為需要讀取 .dll 檔案的型別
+DLLshow_point show_point;
+//在此宣告了一個指標函數，其型別為 void (*)(Point point)，以下類推。
+DLLmove_point move_point;
+DLLmove_point_by_ref move_point_by_ref;
+DLLget_point get_point;
+int main()
+{
+    hDll = LoadLibrary("call struct by python.dll");
+    if(hDll == NULL) printf("no dll");
+    show_point = (DLLshow_point)GetProcAddress(hDll, "show_point");
+    //這個意思是我的 .dll 裡面有個函數名稱為 show_point，然後放進 show_point 這個指標內。
+    move_point = (DLLmove_point)GetProcAddress(hDll, "move_point");
+    move_point_by_ref = (DLLmove_point_by_ref)GetProcAddress(hDll, "move_point_by_ref");
+    Point point = {1, 2};
+    show_point(point);
+    move_point_by_ref(&point);
+    show_point(point);
+    FreeLibrary(hDll);
+    //因為是動態宣告，所以記得最後要 free 記憶體。
+    return 0;
+}
+```
 因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例https://magicjackting.pixnet.net/blog/post/60889356
