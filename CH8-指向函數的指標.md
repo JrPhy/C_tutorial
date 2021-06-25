@@ -49,3 +49,28 @@ void* bsearch (const void* key, const void* base, size_t num, size_t size, int (
 // If the item is not in the array, then it return NULL.
 ```
 在 qsort 與 bsearch 中的最後一個引數即為指標函數，這個指標函數是回傳一個整數，並傳入兩個唯讀的泛型指標。這個指標函數傳入之後，會把另外傳入的泛型指標 base 裡面的東西丟進去做比較。如同變數一樣，當我們宣告變數後，這個變數即有了名稱、位置與數值，所以雖然我們是宣告一個一般函數，還是可以傳入一個指標函數。
+
+#### 4. 指標函數與 typedef
+typedef 這個關鍵字可以將那些很長的關鍵字或是型別縮短，但無法將與儲存類別有關的關鍵字(static, extern, auto, register)納入縮寫，例如
+```C
+typedef 型別 別名;
+typedef unsigned int uint;  //把無號整數的這個型別給了一個別名叫做 uint
+typedef struct data {
+   int HR;
+   float sp;
+   int age;
+} userInfo; //把這個結構體的型別給了一個別名叫做 userInfo
+typedef static int sint; //會報錯
+typedef const int* rv;   //把這個唯讀整數指標的型別給了一個別名叫做 rv
+typedef const int rp;    //把這個唯讀整數位置的型別給了一個別名叫做 rp
+typedef int* iptr;       //把這個整數指標的型別給了一個別名叫做 iptr
+
+uint height;   //== unsigned int height
+userInfo peter;//== struct data peter
+rv b, c;       //== const int* b, c; b 指標，c 為變數 (等同 rp c;)，其值皆不可改變
+const iptr d;  //== const int d; 在此先宣告了一個整數指標 d，並將此指標位置設為唯讀
+```
+同樣的，在指標函數這種很長的宣告我們也可以將其縮寫
+```C
+
+```
