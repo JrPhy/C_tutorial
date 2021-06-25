@@ -19,7 +19,8 @@ function designator 就是 function 名稱，除了作為 sizeof 或取位址 & 
 ```C
 int func1(int, int); //一般函數
 int *func(int, int); //一般函數，回傳值為指標
-int (*func1Ptr)(int, int); //指標函數
+int (*func1Ptr)(int, int); //指標函數，回傳值為整數
+int *(*func2Ptr)(int, int); //指標函數，回傳值為整數指標
 func1Ptr = &func1
 func1Ptr = func1
 ```
@@ -54,12 +55,12 @@ void* bsearch (const void* key, const void* base, size_t num, size_t size, int (
 typedef 這個關鍵字可以將那些很長的關鍵字或是型別縮短，但無法將與儲存類別有關的關鍵字(static, extern, auto, register)納入縮寫，例如
 ```C
 typedef 型別 別名;
-typedef unsigned int uint;  //把無號整數的這個型別給了一個別名叫做 uint
+typedef unsigned int uint;//把無號整數的這個型別給了一個別名叫做 uint
 typedef struct data {
    int HR;
    float sp;
    int age;
-} userInfo; //把這個結構體的型別給了一個別名叫做 userInfo
+} userInfo;              //把這個結構體的型別給了一個別名叫做 userInfo
 typedef static int sint; //會報錯
 typedef const int* rv;   //把這個唯讀整數指標的型別給了一個別名叫做 rv
 typedef const int rp;    //把這個唯讀整數位置的型別給了一個別名叫做 rp
@@ -71,7 +72,12 @@ rv b, c;       //== const int* b, c; b 指標，c 為變數 (等同 rp c;)，其
 iptr d, e;     //== int *d, *e;
 const iptr f;  //== const int f; 在此先宣告了一個整數指標 f，並將此指標位置設為唯讀
 ```
-同樣的，在指標函數這種很長的宣告我們也可以將其縮寫，不過因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例https://magicjackting.pixnet.net/blog/post/60889356
+同樣的，在指標函數這種很長的宣告我們也可以將其縮寫
 ```C
-
+typedef int (*func1Ptr)(int, int); //把此指標函數的的這個型別給了一個別名叫做 func1Ptr
+func1Ptr func; 
 ```
+上述例子中 int (* )(int, int) 是一個型別，func1Ptr 是一個名稱，所以當指標函數搭配 typedef 使用後就可以讓整體程式碼看起來更簡潔。
+
+
+因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例https://magicjackting.pixnet.net/blog/post/60889356
