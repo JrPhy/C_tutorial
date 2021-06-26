@@ -132,4 +132,20 @@ int main()
     return 0;
 }
 ```
-因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例https://magicjackting.pixnet.net/blog/post/60889356
+
+## 4. 一些指標函數原型解讀
+因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例  https://magicjackting.pixnet.net/blog/post/60889356 \
+由上面可知，指標在 C 語言中是一個非常強大的物件，但有些指標函數沒搭配 typedef 在閱讀起來不是那麼容易，以下為某個函數的原型
+```C
+extern void (*signal(int, void(*)(int)))(int);
+```
+我們可以先從最內層的括號來看\
+signal(int, void(* )(int)) 表示 signal 一個函數，其引數為整數與一個指標函數，該指標函數的引數為整數且不回傳值\
+void (* signal(int, void(* )(int)))(int)則表示這是一個指標函數，其引數為 int 且不回傳值。\
+當這個函數搭配一個好的 typedef，則閱讀起來會容易許多
+```C
+typedef void (*SignalHandler)(int);
+extern SignalHandler signal(int signum, SignalHandler handler);
+```
+https://stackoverflow.com/questions/1591361/understanding-typedefs-for-function-pointers-in-c \
+https://stackoverflow.com/questions/15739500/how-to-read-this-prototype \
