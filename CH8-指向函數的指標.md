@@ -1,7 +1,7 @@
-我們從前面幾章已知變數有一般變數 ```(int a;)``` 與指標變數 ```(int *a;)```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```(int add(int a, int b))```在此我們稱其為一般函數，而函數也可回傳指標，原形為```int *add(int a, int b)```。另一個指向函數的指標則稱為**指標函數**(A pointer points to function) ```int (*compare)(const void*, const void*)```，本質上仍為指標，兩者在宣告上非常相似。
+我們從前面幾章已知變數有一般變數 ```(int a;)``` 與指標變數 ```(int *a;)```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```int add(int a, int b)```在此我們稱其為一般函數，而函數也可回傳指標，原形為```int *add(int a, int b)```。另一個指向函數的指標則稱為**指標函數**(A pointer points to function) ```int (*compare)(const void*, const void*)```，本質上仍為指標，兩者在宣告上非常相似。
 
 ## 1. 函數回傳指標
-如上所述，其原型為 ```int *add(int a, int b)``` ```int* add(int a, int b)```，宣告方式與一般的指標宣告方式幾乎一樣。然而此種使用方式一般會以傳入指標或陣列取代，在此不多給範例說明。\
+如上所述，其原型為 ```int *add(int a, int b)```，```int* add(int a, int b)```，宣告方式與一般的指標宣告方式幾乎一樣。然而此種使用方式一般會以傳入指標或陣列取代，在此不多給範例說明。\
 不過須注意如果回傳一陣列，若非用動態宣告而是靜態宣告，則因該宣告是 local variable，故回傳會有錯誤。
 
 ## 2. 指標函數
@@ -13,6 +13,7 @@ int a, *b; // a 為一般變數，b 為指標變數
 int func1(int, int); //一般函數
 int (*func1Ptr)(int, int); //指標函數
 ```
+其中 int (* )(int, int) 為指標函數的型別，func1Ptr 為指標函數的名稱。
 #### 2. 規格書: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
 ```A function designator is an expression that has function type. Except when it is the operand of the sizeof operator or the unary & operator, a function designator with type ‘‘function returning type’’ is converted to an expression that has type ‘‘pointer to function returning type’’.```\
 function designator 就是 function 名稱，除了作為 sizeof 或取位址 & 的運算元，函式指示符在表達式中自動轉換為函式指標類型右值 (為一個不佔有記憶體位置的值)。例如
@@ -21,8 +22,8 @@ int func1(int, int); //一般函數
 int *func(int, int); //一般函數，回傳值為指標
 int (*func1Ptr)(int, int); //指標函數，回傳值為整數
 int *(*func2Ptr)(int, int); //指標函數，回傳值為整數指標
-func1Ptr = &func1
-func1Ptr = func1
+func1Ptr = &func1;   //與下面意思一樣
+func1Ptr = func1;    //與上面意思一樣
 ```
 當指標函數指向一函數後，即可像使用原函數一樣使用。須注意指標的型別，在此須多注意傳入的引數順序、引數型別與引數個數皆要與原函數相同。
 
@@ -50,6 +51,20 @@ void* bsearch (const void* key, const void* base, size_t num, size_t size, int (
 // If the item is not in the array, then it return NULL.
 ```
 在 qsort 與 bsearch 中的最後一個引數即為指標函數，這個指標函數是回傳一個整數，並傳入兩個唯讀的泛型指標。這個指標函數傳入之後，會把另外傳入的泛型指標 base 裡面的東西丟進去做比較。如同變數一樣，當我們宣告變數後，這個變數即有了名稱、位置與數值，所以雖然我們是宣告一個一般函數，還是可以傳入一個指標函數。
+
+若是 qsort 函數原型寫成以下形式且用以下使用方式，則為傳入一個整數而非函數。
+```C
+int compare(const void * a, const void * b)
+{
+    return *(int *)a > *(int *)b ? 1 : -1;
+}
+
+void qsort(void* base, size_t nitems, size_t size, int compare);
+qsort(base, nitems, size, compare(const void * a, const void * b));
+//等同於 qsort(base, nitems, size, 1);
+```
+雖然看起來像是傳入函數，但實際上 base 裡面的物件丟進 compare 函數裡面，可能回傳 1 也可能是 -1，此種寫法只能在 qsort 函數外面做比較，而非在 qsort 函數裡面做比較。\
+因為函數引數裡面也是一個 scope，所以會先將 compare 的回傳值放入 int compare 中，再將此值傳入函數中，所以實際上此種寫法跟傳入 1 or -1 是一樣的。
 
 #### 4. 指標函數與 typedef
 typedef 這個關鍵字可以將那些很長的關鍵字或是型別縮短，但無法將與儲存類別有關的關鍵字(static, extern, auto, register)納入縮寫，例如
