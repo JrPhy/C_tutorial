@@ -84,4 +84,16 @@ void swap(int a, int b)
 雖然單純的加減運算也可以得到相同的效果，但有可能會產生溢位，而使用 XOR 的做法則不會。
 
 #### 4. 計算某數有幾個 bit 為 1
-已知對於任意二進位整數 n，n > 0，至少有 1 個 bit 為 1，先考慮 n = 8 = 2<sup>3</sup> = 1000<sub>2</sub>，當我們取 n & (n-1) 可得 (1000) & (0111) = 0，所以可知對於 n = 2<sup>k</sup> 可這樣做。而對於 n =/= 2<sup>k</sup> 時，
+已知對於任意二進位整數 n，n > 0，至少有 1 個 bit 為 1，先考慮 n = 8 = 2<sup>3</sup> = 1000<sub>2</sub>，當我們取 n & (n-1) 可得 (1000<sub>2</sub>) & (0111<sub>2</sub>) = 0，所以可知對於 n = 2<sup>k</sup> 可這樣做。而對於 n =/= 2<sup>k</sup> 時，設 n = 9 = 1001<sub>2</sub>，則 n & (n-1) = (1001<sub>2</sub>) & (1000<sub>2</sub>) = 1000<sub>2</sub>，最後一步都會到 n = 2<sup>k</sup> 的例子，故可知此算法可行。
+```C
+int bitcount(unsigned int n)
+{
+   int count = 0 ;
+   while (n)
+   {
+      count++ ;
+      n = n&(n - 1);
+   }
+   return count ;
+}
+```
