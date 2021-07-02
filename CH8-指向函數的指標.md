@@ -204,4 +204,4 @@ typedef void (*SignalHandler)(int);
 extern SignalHandler signal(int signum, SignalHandler handler);
 ```
 https://stackoverflow.com/questions/1591361/understanding-typedefs-for-function-pointers-in-c \
-https://stackoverflow.com/questions/15739500/how-to-read-this-prototype \
+https://stackoverflow.com/questions/15739500/how-to-read-this-prototype 
