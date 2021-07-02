@@ -120,7 +120,7 @@ int main()
     hDll = LoadLibrary("call struct by python.dll");
     if(hDll == NULL) printf("no dll");
     show_point = (DLLshow_point)GetProcAddress(hDll, "show_point");
-    //這個意思是我的 .dll 裡面有個函數名稱為 show_point，然後放進 show_point 這個指標內。
+    //這個意思是 .dll 裡面有個函數名稱為 show_point，然後放進 show_point 這個指標內。
     move_point = (DLLmove_point)GetProcAddress(hDll, "move_point");
     move_point_by_ref = (DLLmove_point_by_ref)GetProcAddress(hDll, "move_point_by_ref");
     Point point = {1, 2};
@@ -128,12 +128,68 @@ int main()
     move_point_by_ref(&point);
     show_point(point);
     FreeLibrary(hDll);
-    //因為是動態宣告，所以記得最後要 free 記憶體。
+    //因為是動態宣告，所以記得最後要使用 FreeLibrary 函數 free 記憶體。
     return 0;
 }
 ```
 
-## 4. 一些指標函數原型解讀
+## 4. 善用指標函數減少程式碼
+在某些例子中，我們會需要使用一個 FLAG 來決定需要呼叫哪支函數，例如
+```C
+typedef unsigned char uchar
+void func0() {...};
+void func1() {...};
+void func2() {...};
+
+bool OnStateChange(uchar state) 
+{
+    if (state == 0) func0();
+    else if (state == 1) func1();
+    else if (state == 2) func2();
+    else 
+    {
+        printf("Wrong state!\n");
+        return false;
+    }       
+    return true;
+}
+
+int main()
+{
+    uchar i = 1;
+    OnStateChange(i);
+    return 0;
+}
+```
+上述例子中若使用指標函數改寫則會變成簡潔許多。
+```C
+typedef unsigned char uchar
+void func0() {...};
+void func1() {...};
+void func2() {...};
+
+static void (*command[])(void) = {func0, func1, func2};
+
+int OnStateChange(uchar state) {
+       
+    if (state > 2) 
+    { 
+        printf("ERROR!\n");
+        return false;
+    }
+
+    command[state]();
+    return 0;
+}
+
+int main()
+{
+    uchar i = 1;
+    OnStateChange(i);
+    return 0;
+}
+```
+## 5. 一些指標函數原型解讀
 因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例  https://magicjackting.pixnet.net/blog/post/60889356 \
 由上面可知，指標在 C 語言中是一個非常強大的物件，但有些指標函數沒搭配 typedef 在閱讀起來不是那麼容易，以下為某個函數的原型
 ```C
