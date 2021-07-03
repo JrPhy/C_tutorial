@@ -141,14 +141,14 @@ void func0() {...};
 void func1() {...};
 void func2() {...};
 
-bool OnStateChange(uchar state) 
+bool OnStateChange(uchar flag) 
 {
-    if (state == 0) func0();
-    else if (state == 1) func1();
-    else if (state == 2) func2();
+    if (flag == 0) func0();
+    else if (flag == 1) func1();
+    else if (flag == 2) func2();
     else 
     {
-        printf("Wrong state!\n");
+        printf("ERROR!\n");
         return false;
     }       
     return true;
@@ -156,8 +156,8 @@ bool OnStateChange(uchar state)
 
 int main()
 {
-    uchar i = 1;
-    OnStateChange(i);
+    uchar flag = 1;
+    OnStateChange(flag);
     return 0;
 }
 ```
@@ -170,22 +170,22 @@ void func2() {...};
 
 static void (*command[])(void) = {func0, func1, func2};
 
-int OnStateChange(uchar state) {
+int OnStateChange(uchar flag) {
        
-    if (state > 2) 
+    if (flag > 2) 
     { 
         printf("ERROR!\n");
         return false;
     }
 
-    command[state]();
+    command[flag]();
     return 0;
 }
 
 int main()
 {
-    uchar i = 1;
-    OnStateChange(i);
+    uchar flag = 1;
+    OnStateChange(flag);
     return 0;
 }
 ```
