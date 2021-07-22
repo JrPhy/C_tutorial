@@ -72,17 +72,16 @@ typedef 這個關鍵字可以將那些很長的關鍵字或是型別縮短，但
 typedef 型別 別名;
 typedef unsigned int uint;//把無號整數的這個型別給了一個別名叫做 uint
 typedef struct data {
-   int HR;
-   float sp;
-   int age;
-} userInfo;              //把這個結構體的型別給了一個別名叫做 userInfo
+   int id;
+   float score;
+} result;                //把這個結構體的型別給了一個別名叫做 result
 typedef static int sint; //會報錯
 typedef const int* rv;   //把這個唯讀整數指標的型別給了一個別名叫做 rv
 typedef const int rp;    //把這個唯讀整數位置的型別給了一個別名叫做 rp
 typedef int* iptr;       //把這個整數指標的型別給了一個別名叫做 iptr
 
-uint height;   //height 為無號整數型別
-userInfo peter;//peter 為 data 型別
+uint id;   //height 為無號整數型別
+data peter;//peter 為 data 型別
 rv b, c;       //== const int* b, c; b 指標，c 為變數 (等同 rp c;)，其值皆不可改變
 iptr d, e;     //== int *d, *e;
 const iptr f;  //== const int f; 在此先宣告了一個整數指標 f，並將此指標位置設為唯讀
