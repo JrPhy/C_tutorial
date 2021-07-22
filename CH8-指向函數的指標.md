@@ -1,7 +1,7 @@
 我們從前面幾章已知變數有一般變數 ```int a;``` 與指標變數 ```int *a;```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```int add(int a, int b)```在此我們稱其為一般函數，而函數也可回傳指標，原形為```int *add(int a, int b)```。另一個指向函數的指標則稱為**指標函數**(A pointer points to function) ```int (*compare)(const void*, const void*)```，本質上仍為指標，兩者在宣告上非常相似。
 
 ## 1. 函數回傳指標
-如上所述，其原型為 ```int *add(int a, int b)```，```int* add(int a, int b)```，宣告方式與一般的指標宣告方式幾乎一樣。然而此種使用方式一般會以傳入指標或陣列取代，在此不多給範例說明。\
+如上所述，其原型為 ```int *add(int a, int b)```或```int* add(int a, int b)```，宣告方式與一般的指標宣告方式幾乎一樣。然而此種使用方式一般會以傳入指標或陣列取代，在此不多給範例說明。\
 不過須注意如果回傳一陣列，若非用動態宣告而是靜態宣告，則因該宣告是 local variable，故回傳會有錯誤。
 
 ## 2. 指標函數
@@ -18,10 +18,10 @@ int (*func1Ptr)(int, int); //指標函數
 ```A function designator is an expression that has function type. Except when it is the operand of the sizeof operator or the unary & operator, a function designator with type ‘‘function returning type’’ is converted to an expression that has type ‘‘pointer to function returning type’’.```\
 function designator 就是 function 名稱，除了作為 sizeof 或取位址 & 的運算元，函式指示符在表達式中自動轉換為函式指標類型右值 (為一個不佔有記憶體位置的值)。例如
 ```C
-int func1(int, int); //一般函數
-int *func(int, int); //一般函數，回傳值為指標
+int func1(int, int); //一般函數，回傳值為整數
+int *func(int, int); //一般函數，回傳值為指向整數的指標
 int (*func1Ptr)(int, int); //指標函數，回傳值為整數
-int *(*func2Ptr)(int, int); //指標函數，回傳值為整數指標
+int *(*func2Ptr)(int, int); //指標函數，回傳值為指向整數的指標
 func1Ptr = &func1;   //與下面意思一樣
 func1Ptr = func1;    //與上面意思一樣
 ```
