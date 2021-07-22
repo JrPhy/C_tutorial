@@ -209,8 +209,12 @@ double mean1(double *series, int length)
 double std1(double *series, int length) 
 {
     double a = 0.0, b;
-    b = mean1(series, length);
-    for(int i = 0; i < length; i++) a += series[i]*series[i];
+    for(int i = 0; i < length; i++) 
+    {
+        a += series[i]*series[i];
+        b += series[i];
+    }
+    b /= length;
     return (a/length - b*b);
 }
 
