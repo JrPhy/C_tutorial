@@ -232,7 +232,6 @@ int main()
         .std = std1,
     };
     double a = 0.5, b[] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6};
-    double result = np.exp1(a);
     printf("%f  %f  %f  %f  \n", np.exp1(a), np.log1(a), np.mean(b, 6), np.std(b, 6));
     return 0;
 }
