@@ -190,7 +190,7 @@ int main()
 ```
 
 ## 5. 函數封裝
-C 語言雖然不是物件導向的語言(Object-Orientaled Programming Language, OOPL)，但是也可以做到物件導向(OOP)的功能。C 語言利用 struct 及 pointer 來達到封裝與繼承的效果，利用 void* 或 # define 來達到多型的效果，在此示範使用指標函數來達到物件導向內呼叫類別中函數的效果。
+C 語言雖然不是物件導向的語言(Object-Orientaled Programming Language, OOPL)，但也可以做到物件導向(OOP)的功能。C 語言利用 struct 及 pointer 來達到封裝與繼承的效果，利用 void* 或 #define 來達到多型的效果，在此示範使用指標函數來達到物件導向內呼叫類別中函數的效果。
 ```C
 #include<math.h>
 #include<stdio.h>
