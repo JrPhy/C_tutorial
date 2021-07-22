@@ -188,7 +188,57 @@ int main()
     return 0;
 }
 ```
-## 5. 一些指標函數原型解讀
+
+## 5. 函數封裝
+C 語言雖然不是物件導向的語言(Object-Orientaled Programming Language, OOPL)，但是也可以做到物件導向(OOP)的功能。C 語言利用 struct 及 pointer 來達到封裝與繼承的效果，利用 void* 或 # define 來達到多型的效果，在此示範使用指標函數來達到物件導向內呼叫類別中函數的效果。
+```C
+#include<math.h>
+#include<stdio.h>
+
+double expo(double number) {return exp(number);}
+
+double logr(double number) {return log(number);}
+
+double mean1(double *series, int length)
+{
+    double a = 0.0;
+    for(int i = 0; i < length; i++) a += series[i];
+    return a/length;
+}
+
+double std1(double *series, int length) 
+{
+    double a = 0.0, b;
+    b = mean1(series, length);
+    for(int i = 0; i < length; i++) a += series[i]*series[i];
+    return (a/length - b*b);
+}
+
+typedef struct _numpyFunc
+{
+    double (*exp1)(double number);
+    double (*log1)(double number);
+    double (*mean)(double *series, int length);
+    double (*std)(double *series, int length);
+}numpy;
+
+int main()
+{
+    numpy np =
+    {
+        .exp1 = expo,
+        .log1 = logr,
+        .mean = mean1,
+        .std = std1,
+    };
+    double a = 0.5, b[] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6};
+    double result = np.exp1(a);
+    printf("%f  %f  %f  %f  \n", np.exp1(a), np.log1(a), np.mean(b, 6), np.std(b, 6));
+    return 0;
+}
+```
+
+## 6. 一些指標函數原型解讀
 因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例  https://magicjackting.pixnet.net/blog/post/60889356 \
 由上面可知，指標在 C 語言中是一個非常強大的物件，但有些指標函數沒搭配 typedef 在閱讀起來不是那麼容易，以下為某個函數的原型
 ```C
