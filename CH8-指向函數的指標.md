@@ -136,15 +136,15 @@ int main()
 在某些例子中，我們會需要使用一個 FLAG 來決定需要呼叫哪支函數，例如
 ```C
 typedef unsigned char uchar
-void func0() {...};
-void func1() {...};
-void func2() {...};
+void func0(...) {...};
+void func1(...) {...};
+void func2(...) {...};
 
 bool OnStateChange(uchar flag) 
 {
-    if (flag == 0) func0();
-    else if (flag == 1) func1();
-    else if (flag == 2) func2();
+    if (flag == 0) func0(...);
+    else if (flag == 1) func1(...);
+    else if (flag == 2) func2(...);
     else 
     {
         printf("ERROR!\n");
@@ -163,9 +163,9 @@ int main()
 上述例子中若使用指標函數改寫則會變成簡潔許多。
 ```C
 typedef unsigned char uchar
-void func0() {...};
-void func1() {...};
-void func2() {...};
+void func0(...) {...};
+void func1(...) {...};
+void func2(...) {...};
 
 static void (*command[])(void) = {func0, func1, func2};
 
