@@ -1,7 +1,7 @@
 C 語言是一種編譯語言，也就是程式設計師寫完程式後需要經過編譯器，將所寫的程式轉成電腦看得懂的語言，可以算是將人類的語言轉譯。而編譯流程主要分以下四個階段：
 1. 預處理
    將以下關鍵字做字串取代或是邏輯分析\
-   #define, #include, #if, #elif, #else, #endif, #ifdef, #ifndef, #pragma. 
+   #include, #define, #undef, #if, #elif, #else, #endif, #ifdef, #ifndef, #error, #warning, #pragma. 
 2. 彙編\
    做詞意分析、語意分析、語法分析，中間程式碼產生，最佳化程式碼。不同的編譯器會有不同的邏輯，錯的理由也不盡相同。
 3. 組語\
@@ -11,7 +11,7 @@ C 語言是一種編譯語言，也就是程式設計師寫完程式後需要經
    
 在程式中編譯器遇到以上預處理的字串，會先對那些字串做展開或條件編譯。
 
-## 1. #define
+## 1. #define/#undef
 在 C 語言中使用 #define 來取代程式中所有相同的文字，若是相同預取代字串出現兩次，則以後面的為主，且最後不用分號。\
 #define 預處理字串 要取代成的字串
 ```C
@@ -45,6 +45,16 @@ CUBIC1(1+1) = (1+1)* (1+1)* (1+1) = 8\
 CUBIC2(1+1) = 1+1* 1+1* 1+1 = 4
 
 因為 #define 是做取代，故在程式執行上速度會稍微快，但是程式碼也會相對大，故必須自己做取捨。
+若是程式執行到某一段不想用該 #define，則可以使用 #undef 來取消
+```C
+#include <stdio.h>  
+#define PI 3.1415926  
+int square=number*number;  
+#undef PI  
+int main() {  
+   printf("%d",PI);  //這邊編譯器就會報錯
+}
+```
 
 ## 2. #include
 對大部分初學者來說，在 C 語言的第一隻程式應該就是在螢幕上印出 hello world，在此最上面就會使用到此預處理功能。
@@ -119,3 +129,5 @@ struct data userObject ={165, 4.35, 23};
 ...
 #endif
 ```
+
+## 4. #error/#warning
