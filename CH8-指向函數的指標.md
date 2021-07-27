@@ -1,4 +1,4 @@
-我們從前面幾章已知變數有一般變數 ```int a;``` 與指標變數 ```int *a;```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```int add(int a, int b)```在此我們稱其為一般函數，而函數也可回傳指標，原形為```int *add(int a, int b)```。另一個指向函數的指標則稱為**指標函數**(A pointer points to function) ```int (*compare)(const void*, const void*)```，本質上仍為指標，兩者在宣告上非常相似。
+我們從前面幾章已知變數有一般變數 ```int a;``` 與指標變數 ```int *a;```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```int add(int a, int b)```在此我們稱其為一般函數，而函數也可回傳指標，原形為```int *add(int a, int b)```。另一個指向函數的指標則稱為**指標函數** (A pointer points to function) ```int (*add)(int a, int b)``` ```int (*compare)(const void*, const void*)```，本質上仍為指標，兩者在宣告上非常相似。因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例  https://magicjackting.pixnet.net/blog/post/60889356 \
 
 ## 1. 函數回傳指標
 如上所述，其原型為 ```int *add(int a, int b)```或```int* add(int a, int b)```，宣告方式與一般的指標宣告方式幾乎一樣。然而此種使用方式一般會以傳入指標或陣列取代，在此不多給範例說明。\
@@ -14,7 +14,10 @@ int func1(int, int); //一般函數
 int (*func1Ptr)(int, int); //指標函數
 ```
 其中 int (* )(int, int) 為指標函數的型別，func1Ptr 為指標函數的名稱。
-#### 2. 規格書: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
+#### 2. 算符優先序
+由前面所提到的 add 函數可知，```int *add(int a, int b)```是回傳整數指標的函數，```int (*add)(int a, int b)```是回傳整數的指標函數，這是因為函數的 () 優先序高於指標的 * ，所以若是要宣告指標函數，則需要將 * 與函數名稱括號起來才是指標函數。
+
+#### 3. 規格書: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
 ```A function designator is an expression that has function type. Except when it is the operand of the sizeof operator or the unary & operator, a function designator with type ‘‘function returning type’’ is converted to an expression that has type ‘‘pointer to function returning type’’.```\
 function designator 就是 function 名稱，除了作為 sizeof 或取位址 & 的運算元，函式指示符在表達式中自動轉換為函式指標類型右值 (為一個不佔有記憶體位置的值)。例如
 ```C
@@ -169,8 +172,8 @@ void func2(...) {...};
 
 static void (*command[])(void) = {func0, func1, func2};
 
-int OnStateChange(uchar flag) {
-       
+int OnStateChange(uchar flag) 
+{
     if (flag > 2) 
     { 
         printf("ERROR!\n");
@@ -242,8 +245,7 @@ int main()
 ```
 
 ## 6. 一些指標函數原型解讀
-因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例  https://magicjackting.pixnet.net/blog/post/60889356 \
-由上面可知，指標在 C 語言中是一個非常強大的物件，但有些指標函數沒搭配 typedef 在閱讀起來不是那麼容易，以下為某個函數的原型
+指標在 C 語言中是一個非常強大的物件，但有些指標函數沒搭配 typedef 在閱讀起來不是那麼容易，以下為某個函數的原型
 ```C
 extern void (*signal(int, void(*)(int)))(int);
 ```
