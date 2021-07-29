@@ -64,7 +64,7 @@ int compare(const void * a, const void * b)
 
 void qsort(void* base, size_t nitems, size_t size, int compare);
 qsort(base, nitems, size, compare(const void * a, const void * b));
-//等同於 qsort(base, nitems, size, 1);
+//等同於 qsort(base, nitems, size, 1); or qsort(base, nitems, size, -1); 
 ```
 雖然看起來像是傳入函數，但實際上 base 裡面的物件丟進 compare 函數裡面，可能回傳 1 也可能是 -1，此種寫法只能在 qsort 函數外面做比較，而非在 qsort 函數裡面做比較。\
 因為函數引數裡面也是一個 scope，所以會先將 compare 的回傳值放入 int compare 中，再將此值傳入函數中，所以實際上此種寫法跟傳入 1 or -1 是一樣的。
@@ -172,9 +172,9 @@ void func2(...) {...};
 
 static void (*command[])(void) = {func0, func1, func2};
 
-int OnStateChange(uchar flag) 
+bool OnStateChange(uchar flag) 
 {
-    if (flag > 2) 
+    if (flag > 2 || flag < 0) 
     { 
         printf("ERROR!\n");
         return false;
