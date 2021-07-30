@@ -250,8 +250,8 @@ int main()
 extern void (*signal(int, void(*)(int)))(int);
 ```
 我們可以先從最內層的括號來看\
-signal(int, void(* )(int)) 表示 signal 一個函數，其引數為整數與一個指標函數，該指標函數的引數為整數且不回傳值\
-void (* signal(int, void(* )(int)))(int)則表示這是一個指標函數，其引數為 int 且不回傳值。\
+```signal(int, void(* )(int))``` 表示 signal 一個函數，其引數為整數與一個指標函數，該指標函數的引數為整數且不回傳值\
+```void (* signal(int, void(* )(int)))(int)```則表示這是一個指標函數，其引數為 int 且不回傳值。\
 當這個函數搭配一個好的 typedef，則閱讀起來會容易許多
 ```C
 typedef void (*SignalHandler)(int);
