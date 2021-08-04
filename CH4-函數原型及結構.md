@@ -130,7 +130,7 @@ int main()
 也可將函數原型先宣告於 main 之前，在將函數的詳細內容寫在 main 之後。此時當 main 函式中呼叫到你所宣告的函數名稱時，就會去往下找他的實做方式
 ```C
 #include<stdio.h>
-int max(int a, int b);
+int max(int a, int b);  //此為函數的宣告
 
 int main()
 {
@@ -142,7 +142,7 @@ int main()
     return 0;
 }
 
-int max(int a, int b)
+int max(int a, int b  //此為函數的定義
 {
     if(a >= b) return a;
     else return b;
