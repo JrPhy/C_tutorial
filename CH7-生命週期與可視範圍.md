@@ -151,6 +151,7 @@ int main()
 static const int c_vacuum = 299792458; // m/s
 int main()
 {
+    const int d = 10; //此變數的值在其生命週期內不能改變
     c_vacuum = 3e8; //會報錯
     int a = 10, b = 15;
     const int *p = &a;
