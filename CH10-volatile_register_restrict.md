@@ -38,13 +38,19 @@ while (*ptr == 0)
 如此一來就會跟著所接收到的資料改變。其餘範例可參考維基百科
 https://en.wikipedia.org/wiki/Volatile_(computer_programming)
 
-#### 3. 與多執行緒的關係
-volatile 這個關鍵字是在 C99 前就已經有的，然而與多執行緒 (multiple threading) 的關鍵字與 header 則是在 C11 才加入在多執行緒程式中。在多執行緒程式要避免死結 (Deadlock)[1] 的發生，這會讓 CPU 的使用效率大大降低，其中一個解法就是使用 mutex 上鎖。那麼在沒有用 C11 標準要如何避免呢？volatile 就是一個解法。
-https://www.drdobbs.com/cpp/volatile-the-multithreaded-programmers-b/184403766
+#### 3. 與 const 合用
+const 這個關鍵字可以讓變數的值不能由**程式碼**改變，所以當從外部讀取某個資料，且一定要放在某一段記憶體時，就會看到這種用法
+```C
+unsigned int const volatile *status_reg; //
+```
 
+#### 4. 與多執行緒的關係
+volatile 這個關鍵字是在 C99 前就已經有的，然而與多執行緒 (multiple threading) 的關鍵字與 header 則是在 C11 才加入在多執行緒程式中。在多執行緒程式要避免死結 (Deadlock)[1] 的發生，這會讓 CPU 的使用效率大大降低，其中一個解法就是使用 mutex 上鎖。那麼在沒有用 C11 標準要如何避免呢？volatile 就是一個解法，詳情可參考以下文章
+https://www.drdobbs.com/cpp/volatile-the-multithreaded-programmers-b/184403766
 [1] 死結 (Deadlock)：當有以下情況**同時**發生時就是產生了競爭條件
 1. 禁止搶占（no preemption）：系統資源不能被強制從一個行程中登出。
 2. 持有和等待（hold and wait）：一個行程可以在等待時持有系統資源。
 3. 互斥（mutual exclusion）：資源只能同時分配給一個行程，無法多個行程共享。
 4. 循環等待（circular waiting）：一系列行程互相持有其他行程所需要的資源。
 https://zh.wikipedia.org/wiki/%E6%AD%BB%E9%94%81
+
