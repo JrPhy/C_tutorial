@@ -17,25 +17,41 @@ int * volatile foo;//一個位置易變的整數指標
 int volatile * volatile foo;//一個值與位置易變的整數指標
 ```
 
-#### 2. 在 I/O 的情況下使用
+#### 2. 編譯器優化
+當程式碼寫完後編譯器會先做檢查，當編譯器發現此值只會與最後出現的敘述有關時，編譯器就會把前面的程式碼忽略，只接跳到最後一個跟他有關的敘述。
 ```C
-uint8_t * ptr = (uint8_t *) 0x1234;
-// 等待某些指令讓 *ptr 不為 0
-while (*ptr == 0)
+int a = 1;
+a = 2;
+a = 3;
+```
+此時編譯器會值將讓 a = 3，但是這種寫法可能有其他用意，如下面例子所述。
+
+#### 3. 在 I/O 的情況下使用
+```C
+int *output = (unsigned int *)0xff800000;  //定義一個IO埠；
+void init(void)
 {
-    //do something
+    int i;
+    for(i = 0; i < 10; i++) *output = i;
 }
 ```
-以上程式碼片段為等待儀器或使用者狀態改變用，但是編譯器覺得從上下文看不出什麼變化，所以會直接把這段省略掉，所以不能得到預期的結果。可將以上程式碼修改為以下的寫法
+以上程式碼片段為等待儀器或使用者狀態改變用，但是編譯器覺得從上下文看不出什麼變化，所以會將以上程式碼優化如下
 ```C
-volatile uint8_t * ptr = (volatile uint8_t *) 0x1234;
-// 等待某些指令讓 *ptr 不為 0
-while (*ptr == 0)
+int *output = (unsigned int *)0xff800000;  //定義一個IO埠；
+void init(void)
 {
-    //do something
+    *output = 9;
 }
 ```
-如此一來就會跟著所接收到的資料改變。其餘範例可參考維基百科
+所以可將 * output 用 volatile 修飾，如此一來就會跟著所接收到的資料改變。其餘範例可參考維基百科
+```C
+volatile int *output = (unsigned int *)0xff800000;  //定義一個IO埠；
+void init(void)
+{
+    int i;
+    for(i = 0; i < 10; i++) *output = i;
+}
+```
 https://en.wikipedia.org/wiki/Volatile_(computer_programming)
 
 #### 3. 與 const 合用
@@ -56,6 +72,33 @@ https://www.drdobbs.com/cpp/volatile-the-multithreaded-programmers-b/184403766 \
 https://zh.wikipedia.org/wiki/%E6%AD%BB%E9%94%81
 
 ## 2. register
-雖然對於多數的程式設計者而言記憶體可以當作是一樣的，但是在硬體上其實存在著不同等級的記憶體。在電腦中越貴的記憶體跑越快，當然容量也越小，反之則越大，所以速度最快的記憶體通常最少，反之最多。若是牽涉到較接近底層硬體的程式，那就會使用到此關鍵字。
-[!image](pic/memory_level.png)
-source: CSAPP
+雖然對於多數的程式設計者而言記憶體可以當作是一樣的，但是在硬體上其實存在著不同等級的記憶體。在電腦中越貴的記憶體跑越快，當然容量也越小，反之則越大，所以速度最快的記憶體通常最少，反之最多。若是牽涉到較接近底層硬體的程式就會使用到此關鍵字。 \
+![image](pic/memory_level.jpg) \
+source: CSAPP 
+一般的變數如果沒特別宣告，大部分是存在 RAM 中，當使用此關鍵字修飾該變數時，該變數就會放在 CPU 的記憶體中。下方例子展示一的變數用 register 較沒用此關鍵字修飾的將近快 2 倍。
+```C
+#include <stdio.h>
+#include <time.h>
+
+int main()
+{
+
+    clock_t start, end;
+    start = clock();
+    
+    register int a = 0;  // t = 0.002065 s
+    //int a = 0;  // t = 0.003931 s
+    for(int i = 0; i < 1000001; i++)
+    {
+        ++a;
+        --a;
+    }
+    
+    end = clock();
+    double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("%f\n", cpu_time_used);
+    
+    return 0;
+}
+```
+
