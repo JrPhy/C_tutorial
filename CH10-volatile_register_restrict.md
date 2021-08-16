@@ -126,4 +126,13 @@ int add(int * restrict a, int * restrict b)
     return *a + *b;
 }
 ```
-所以在上述兩函數宣告中，引數有用 restrict 修飾的關鍵字所產生的組合語言會比較短，可參考以下網址 https://www.zhihu.com/question/41653775 \
+所以在上述兩函數宣告中，引數有用 restrict 修飾的關鍵字所產生的組合語言會比較短，也就是這樣子的程式會跑比較快，可參考以下資料 \
+https://www.zhihu.com/question/41653775 \
+https://youtu.be/CDOTMOUXqR4?t=844 \
+而在 C 的標準函示庫中也有使用到此關鍵字
+```C
+void * memcpy(void * restrict s1, const void * restrict s2, size_t n);
+void * memmove(void * s1, const void * s2, size_t n);   
+```
+這兩個函數的功能幾乎完全一樣，不過可看到 memcpy 在引數的部分有加入 restrict，表示程式設計者要自行注意這兩段記憶體是否有重疊，而 memmove 沒有。所以實際使用上 memcpy 會比較快，但是 memmove 比較安全，但只要程式設計者有注意到記憶體不要重疊，那麼 memcpy 是比較好的選項。
+在這必須再強調一次，restrict 是告訴編譯器可以優化，但是優化的前提是程式設計者保證這兩個指標的記憶體位置沒有重疊。
