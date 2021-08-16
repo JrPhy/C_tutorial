@@ -134,5 +134,5 @@ https://youtu.be/CDOTMOUXqR4?t=844 \
 void * memcpy(void * restrict s1, const void * restrict s2, size_t n);
 void * memmove(void * s1, const void * s2, size_t n);   
 ```
-這兩個函數的功能幾乎完全一樣，不過可看到 memcpy 在引數的部分有加入 restrict，表示程式設計者要自行注意這兩段記憶體是否有重疊，而 memmove 沒有。所以實際使用上 memcpy 會比較快，但是 memmove 比較安全，但只要程式設計者有注意到記憶體不要重疊，那麼 memcpy 是比較好的選項。
+這兩個函數的功能幾乎完全一樣，不過可看到 memcpy 在引數的部分有加入 restrict，表示程式設計者要自行注意這兩段記憶體是否有重疊，而 memmove 沒有。所以實際使用上 memcpy 會比較快，但是 memmove 比較安全，但只要程式設計者有注意到記憶體不要重疊，那麼 memcpy 是比較好的選項。 \
 在這必須再強調一次，restrict 是告訴編譯器可以優化，但是優化的前提是程式設計者保證這兩個指標的記憶體位置沒有重疊。
