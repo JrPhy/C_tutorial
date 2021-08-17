@@ -74,7 +74,7 @@ https://zh.wikipedia.org/wiki/%E6%AD%BB%E9%94%81
 ## 2. register
 雖然對於多數的程式設計者而言記憶體可以當作是一樣的，但是在硬體上其實存在著不同等級的記憶體。在電腦中越貴的記憶體跑越快，當然容量也越小，反之則越大，所以速度最快的記憶體通常最少，反之最多。若是牽涉到較接近底層硬體的程式就會使用到此關鍵字。 \
 ![image](pic/memory_level.jpg) \
-source: CSAPP 
+source: OPERATING SYSTEM CONCEPTS 10ed \
 一般的變數如果沒特別宣告，大部分是存在 RAM 中，當使用此關鍵字修飾該變數時，該變數就會放在 CPU 的記憶體中。下方例子展示一的變數用 register 較沒用此關鍵字修飾的將近快 2 倍。
 ```C
 #include <stdio.h>
