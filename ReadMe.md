@@ -3,14 +3,13 @@ C 語言是一個非常簡單的語言，其關鍵字在 C99 以前僅有 32 個
 1. C89/C90
 這是 C 語言第一次給出一個統一個規格，由美國國家標準委員會訂定，又稱為 ANSI C。在此版本中共有 32 個關鍵字如下
 
-
 | 變數型別 | 流程控制 | 生命週期 | 其他 |
 | --- | --- | --- | --- |
 | char | if | auto | const |
 | short | else | extern | register |
 | int | continue | static | typedef |
-| unsigned | break | volatile | |
-| long | for | extern | |
+| unsigned | break | volatile | sizeof |
+| long | for | | |
 | float | switch | | |
 | double | default | |
 | signed | case | | |
