@@ -48,8 +48,7 @@ void init(void)
 volatile int *output = (unsigned int *)0xff800000;  //定義一個IO埠；
 void init(void)
 {
-    int i;
-    for(i = 0; i < 10; i++) *output = i;
+    for(int i = 0; i < 10; i++) *output = i;
 }
 ```
 https://en.wikipedia.org/wiki/Volatile_(computer_programming)
