@@ -8,13 +8,14 @@
 #include<stdio.h>
 void swap1(int a, int b) {int temp = a; a = b, b = temp;} 
 void swap2(int *a, int *b) {int temp = *a; *a = *b, *b = temp;}
-int main(){
+int main()
+{
 	int a = 1, b = 2, *pa = &a, *pb = &b;
 	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-    swap1(a, b);    //不改變 :)
-    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-    swap2(&a, &b);  //a, b 值會改變
-    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+	swap1(a, b);    //不改變 :)
+	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+	swap2(&a, &b);  //a, b 值會改變
+	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
 	return 0;
 }
 ```
@@ -22,11 +23,12 @@ int main(){
 ```C
 #include<stdio.h>
 void swap(int**p1 ,int **p2) {int* temp; temp = *p1; *p1 = *p2; *p2 = temp;}
-int main(){
+int main()
+{
 	int a = 1, b = 2, *pa = &a, *pb = &b;
 	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-    swap(&pa, &pb);//pa, pb 值會改變，但 a, b 值不會改變
-    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+	swap(&pa, &pb);//pa, pb 值會改變，但 a, b 值不會改變
+	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
 	return 0;
 }
 ```
