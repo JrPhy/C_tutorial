@@ -8,7 +8,6 @@
 #include<stdio.h>
 void swap1(int a, int b) {int temp = a; a = b, b = temp;} 
 void swap2(int *a, int *b) {int temp = *a; *a = *b, *b = temp;}
-void swap3(int**p1 ,int **p2) {int* temp; temp = *p1; *p1 = *p2; *p2 = temp;}
 int main(){
 	int a = 1, b = 2, *pa = &a, *pb = &b;
 	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
