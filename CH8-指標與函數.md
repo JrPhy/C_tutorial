@@ -1,10 +1,42 @@
-我們從前面幾章已知變數有一般變數 ```int a;``` 與指標變數 ```int *a;```，而函數本身若有回傳值，因其佔有記憶體位置與值，故也可當成變數 ```int add(int a, int b)```在此我們稱其為一般函數，而函數也可回傳指標，原形為```int *add(int a, int b)```。另一個指向函數的指標則稱為**指標函數** (A pointer points to function) ```int (*add)(int a, int b)``` ```int (*compare)(const void*, const void*)```，本質上仍為指標，兩者在宣告上非常相似。因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例  https://magicjackting.pixnet.net/blog/post/60889356 
+我們從前面幾章已知變數有一般變數 ```int a;``` 與指標變數 ```int *a;```，而函數本身若有回傳值，因其在被呼叫時佔有記憶體位置與值，故也可當成變數 ```int add(int a, int b)```在此我們稱其為一般函數，而函數也可回傳指標，原形為```int *add(int a, int b)```。另一個指向函數的指標則稱為**指標函數** (A pointer points to function) ```int (*add)(int a, int b)``` ```int (*compare)(const void*, const void*)```，本質上仍為指標，兩者在宣告上非常相似。因為指標函數會牽涉到許多括號與星號，故建議先看以下網址再看範例  https://magicjackting.pixnet.net/blog/post/60889356 
 
-## 1. 函數回傳指標
+## 1. 只有 call by value
+在 C 語言中常常會聽到函數有 call by value, call by address, 甚至 call by reference(C++ 才有)。而在規格書[1]中提到
+```A pointer type may be derived from a function type, an object type, or an incomplete type, called the referenced type. A pointer type describes an object whose value provides a reference to an entity of the referenced type. A pointer type derived from the referenced type T is sometimes called ‘‘pointer to T’’. The construction of a pointer type from a referenced type is called ‘‘pointer type derivation’’. ```\
+所以只有 call by value。而傳入物件時都會先複製一份該物件，然後再把**複製的那份傳入函數中**，所以在寫 swap 函數時是傳入 addrres，把地址複製一份後傳入函數中，裡面的指標就會指向傳入的物件位置。
+```C
+#include<stdio.h>
+void swap1(int a, int b) {int temp = a; a = b, b = temp;} 
+void swap2(int *a, int *b) {int temp = *a; *a = *b, *b = temp;}
+void swap3(int**p1 ,int **p2) {int* temp; temp = *p1; *p1 = *p2; *p2 = temp;}
+int main(){
+	int a = 1, b = 2, *pa = &a, *pb = &b;
+	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    swap1(a, b);    //不改變 :)
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    swap2(&a, &b);  //a, b 值會改變
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+	return 0;
+}
+```
+依照此想法，若想改變指標的指向該物件的值，那麼可以傳入一個指標的指標。
+```C
+#include<stdio.h>
+void swap(int**p1 ,int **p2) {int* temp; temp = *p1; *p1 = *p2; *p2 = temp;}
+int main(){
+	int a = 1, b = 2, *pa = &a, *pb = &b;
+	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    swap(&pa, &pb);//pa, pb 值會改變，但 a, b 值不會改變
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+	return 0;
+}
+```
+
+## 2. 函數回傳指標
 如上所述，其原型為 ```int *add(int a, int b)```或```int* add(int a, int b)```，宣告方式與一般的指標宣告方式幾乎一樣。然而此種使用方式一般會以傳入指標或陣列取代，在此不多給範例說明。\
 不過須注意如果回傳一陣列，若非用動態宣告而是靜態宣告，則因該宣告是 local variable，故回傳會有錯誤。
 
-## 2. 指標函數
+## 3. 指標函數
 如之前所提到，函數本身也佔有一記憶體位置與空間，故可以宣告一指標指向該函數的位置，指標函數本身仍為指標。
 #### 1. 宣告
 指標函數的宣告，除了與一般函數一樣需要回傳型別、函數名稱與傳入引數外，其名稱需括號並在前面加上星號代表該函數為指標函數，因指標宣告的星號 * 運算優先次序比用為函數參數列的小括弧為低。
@@ -19,7 +51,7 @@ int (*func1Ptr)(int, int); //指標函數
 
 #### 3. 規格書: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
 ```A function designator is an expression that has function type. Except when it is the operand of the sizeof operator or the unary & operator, a function designator with type ‘‘function returning type’’ is converted to an expression that has type ‘‘pointer to function returning type’’.```\
-function designator 就是 function 名稱，除了作為 sizeof 或取位址 & 的運算元，函式指示符在表達式中自動轉換為函式指標類型右值 (為一個不佔有記憶體位置的值)。例如
+function designator 就是 function 名稱，除了作為 sizeof 或取位址 & 的運算元，函式指示符在表達式中自動轉換為函式指標類型 (為一個不佔有記憶體位置的值)。例如
 ```C
 int func1(int, int); //一般函數，回傳值為整數
 int *func(int, int); //一般函數，回傳值為指向整數的指標
@@ -96,7 +128,7 @@ func1Ptr func;
 ```
 上述例子中 int (* )(int, int) 是一個型別，func1Ptr 是一個名稱，所以當指標函數搭配 typedef 使用後就可以讓整體程式碼看起來更簡潔。
 
-## 3. 呼叫 dll (動態函式庫)
+## 4. 呼叫 dll (動態函式庫)
 在 windows 很多應用程式中都會有包含 .dll 這個檔案，全名為 dynamic-link library。顧名思義當使用到的時候我們會去開一個記憶體位置，將該記憶體位置指向 .dll 裡面的函數拿出來使用，以下就給一個 C 語言呼叫 .dll 的方法。
 ```C
 #include <stdio.h>
@@ -135,7 +167,7 @@ int main()
 }
 ```
 
-## 4. 善用指標函數減少程式碼
+## 5. 善用指標函數減少程式碼
 在某些例子中，我們會需要使用一個 FLAG 來決定需要呼叫哪支函數，例如
 ```C
 typedef unsigned char uchar
@@ -192,7 +224,7 @@ int main()
 }
 ```
 
-## 5. 函數封裝
+## 6. 函數封裝
 C 語言利用 struct 及 pointer 來達到封裝與繼承的效果，利用 void* 或 #define 來達到多型的效果，在此示範使用指標函數來達到物件導向內呼叫類別中函數的效果。
 ```C
 #include<math.h>
@@ -244,7 +276,7 @@ int main()
 }
 ```
 
-## 6. 一些指標函數原型解讀
+## 7. 一些指標函數原型解讀
 指標在 C 語言中是一個非常強大的物件，但有些指標函數沒搭配 typedef 在閱讀起來不是那麼容易，以下為某個函數的原型
 ```C
 extern void (*signal(int, void(*)(int)))(int);
@@ -259,3 +291,6 @@ extern SignalHandler signal(int signum, SignalHandler handler);
 ```
 https://stackoverflow.com/questions/1591361/understanding-typedefs-for-function-pointers-in-c \
 https://stackoverflow.com/questions/15739500/how-to-read-this-prototype 
+
+
+[1] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
