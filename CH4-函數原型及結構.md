@@ -121,8 +121,7 @@ int main()
 {
     int array[] = {6, 4, 9, -1, 5, 8, 11, -3};
     int value = -9999, i;
-    for(i = 0; i < 8; i++)
-    value = max(value, array[i]);
+    for(i = 0; i < 8; i++) value = max(value, array[i]);
     printf("%d\n", value);
     return 0;
 }
@@ -142,7 +141,7 @@ int main()
     return 0;
 }
 
-int max(int a, int b  //此為函數的定義
+int max(int a, int b  //此為函數的定義或實作
 {
     if(a >= b) return a;
     else return b;
