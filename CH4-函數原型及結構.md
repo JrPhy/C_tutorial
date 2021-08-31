@@ -183,3 +183,12 @@ source: OPERATING SYSTEM CONCEPTS 10ed
 不論是在傳入引數或是回傳值，都會先將欲傳入的值或是回傳值置於 stack 中，當整個函數呼叫結束後就會自動釋放。一般來說 stack 的大小通常很小，但可以通過編譯器來調整大小。所以若是遞迴函數傳得太深，就會造成 stack overflow。雖然遞迴函數在撰寫上可以寫得非常簡潔，但是在實際使用上卻非常危險。
 
 函數除了先將回傳值傳出來外，也可以在函數裡面呼叫自己，此種函數稱為遞迴函數，此時函數的回傳值會先存在 stack memory 中，直到呼叫到最後一層才釋放。
+```C
+int Fibonacci(int n)
+{
+    if(n == 0) return 0;
+    else if (n == 1) return 1;
+    else return (Fibonacci(n-1) + Fibonacci(n-2));
+}
+```
+在上述費式數列遞迴版的程式中，若呼叫 Fibonacci(5)，則在函數中會再呼叫 Fibonacci(4) 和 Fibonacci(3)，Fibonacci(4) 又會呼叫 Fibonacci(3) 和 Fibonacci(2)，直到呼叫到 Fibonacci(1) 或 Fibonacci(0) 才會停止，而這些回傳直都是先放在 stack 中，所以 n 過大就有可能出現 stack overflow。
