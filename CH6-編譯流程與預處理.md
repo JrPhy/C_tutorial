@@ -51,8 +51,9 @@ CUBIC2(1+1) = 1+1* 1+1* 1+1 = 4
 #define PI 3.1415926  
 int square=number*number;  
 #undef PI  
-int main() {  
-   printf("%d",PI);  //這邊編譯器就會報錯
+int main() 
+{  
+     printf("%d",PI);  //這邊編譯器就會報錯
 }
 ```
 
@@ -73,11 +74,12 @@ a.h
 #define A_H_
 
 int add(int a, int b);
-struct data {
-   int HR;
-   float sp;
-   int age;
-} userInfo;
+struct data 
+{
+    int HR;
+    float sp;
+    int age;
+}userInfo;
 #endif
 ```
 a.c
@@ -86,8 +88,8 @@ a.c
 #include "a.h"
 int add(int a, int b)
 {
-   printf("%d", a);
-   return (a+b);
+    printf("%d", a);
+    return (a+b);
 }
 struct data userObject ={165, 4.35, 23};
 ```
@@ -96,16 +98,17 @@ struct data userObject ={165, 4.35, 23};
 #include <stdio.h>
 
 int add(int a, int b);
-struct data {
-   int HR;
-   float sp;
-   int age;
-} userInfo;
+struct data 
+{
+    int HR;
+    float sp;
+    int age;
+}userInfo;
 
 int add(int a, int b)
 {
-   printf("%d", a);
-   return (a+b);
+    printf("%d", a);
+    return (a+b);
 }
 struct data userObject ={165, 4.35, 23};
 ```
