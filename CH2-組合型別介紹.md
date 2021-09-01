@@ -119,7 +119,7 @@ peter.birthday[6] = ‘\0’;
 ```C
 union student
 {
-    char birthday[7];
+    char birthday[8];
     int16_t id;
     float score;
 }peter;
