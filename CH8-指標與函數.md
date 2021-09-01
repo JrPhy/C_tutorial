@@ -107,10 +107,11 @@ typedef 這個關鍵字可以將那些很長的關鍵字或是型別縮短，但
 ```C
 typedef 型別 別名;
 typedef unsigned int uint;//把無號整數的這個型別給了一個別名叫做 uint
-typedef struct data {
-   int id;
-   float score;
-} result;                //把這個結構體的型別給了一個別名叫做 result
+typedef struct data 
+{
+	int id;
+	float score;
+}result;                //把這個結構體的型別給了一個別名叫做 result
 typedef static int sint; //會報錯
 typedef const int* rv;   //把這個唯讀整數指標的型別給了一個別名叫做 rv
 typedef const int rp;    //把這個唯讀整數位置的型別給了一個別名叫做 rp
@@ -138,7 +139,7 @@ typedef struct
 {
     int x;
     int y;
-} Point;
+}Point;
 typedef void (*DLLshow_point)(Point point);
 typedef void (*DLLmove_point)(Point point);
 typedef void (*DLLmove_point_by_ref)(Point *point);
