@@ -49,8 +49,8 @@ int bitAdd(int a, int b)
 {
     while (b != 0) 
     {
-        int x = a ^ b;
-        int y = (a & b) << 1; 
+        unsigned int x = (unsigned int)a ^ (unsigned int)b;
+        unsigned int y = ((unsigned int)a & (unsigned int)b) << 1; 
         a = x;
         b = y;
     }
