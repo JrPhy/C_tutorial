@@ -120,8 +120,8 @@ C 語言雖然不是物件導向的語言，也就是**沒有內建**物件導�
 
 int compare(const void * a, const void * b)
 {
-    return *(int *)a > *(int *)b ? 1 : -1;
-    //if (*(int *)a > *(int *)b ) return 1;
+    return *(int *)a - *(int *)b;
+    //> 0 升序，< 0 降序
     //else return -1;
 }
 
