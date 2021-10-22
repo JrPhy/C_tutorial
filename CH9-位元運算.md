@@ -31,7 +31,7 @@ OR 就是只當其中一事件就成立，則只要有一事件為 1 或是兩�
 | b = 0 | 0 | 1 |
 | b = 1 | 1 | 1 |
 
-可用此性質將某變數的第 n 的位元設成 1 ```void SetNthBit(unsigned char x, unsigned char n) {x |= (1 << n);}```，此種寫法只會將第 n 位的位元設為 1。\
+可用此性質將某變數的第 n 的位元設成 1 ```void SetNthBit(unsigned char x, unsigned char n) {x |= (1 << n);}```，此種寫法只會將第 n 位的位元設為 1。
 ```
 SetNthBit(1, 5); 
 /*
