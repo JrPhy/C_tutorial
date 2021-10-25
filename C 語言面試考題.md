@@ -1,4 +1,4 @@
-## 1. 指標
+## 1. [指標](https://github.com/JrPhy/C_tutorial/blob/main/CH5-%E6%8C%87%E6%A8%99%E8%88%87%E5%AD%97%E4%B8%B2.md)
 ```C
 char s[]="0113256";
 char *p=s;           // p 指向 s[0]
