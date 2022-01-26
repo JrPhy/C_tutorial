@@ -3,7 +3,7 @@
 ## 1. 只有 call by value
 在 C 語言中常常會聽到函數有 call by value, call by address, 甚至 call by reference(C++ 才有)。而在規格書[1]中提到
 ```A pointer type may be derived from a function type, an object type, or an incomplete type, called the referenced type. A pointer type describes an object whose value provides a reference to an entity of the referenced type. A pointer type derived from the referenced type T is sometimes called ‘‘pointer to T’’. The construction of a pointer type from a referenced type is called ‘‘pointer type derivation’’. ```\
-所以只有 call by value。而傳入物件時都會先複製一份該物件，然後再把**複製的那份傳入函數中**，所以在寫 swap 函數時是傳入 addrres，把地址複製一份後傳入函數中，裡面的指標就會指向傳入的物件位置。
+所以只有 call by value。而傳入物件時都會先複製一份該物件，然後再把**複製的那份傳入函數中**，所以在寫 swap 函數時是傳入 address，把地址複製一份後傳入函數中，裡面的指標就會指向傳入的物件位置。
 ```C
 #include<stdio.h>
 void swap1(int a, int b) {int temp = a; a = b, b = temp;} 
@@ -131,44 +131,76 @@ func1Ptr func;
 上述例子中 int (* )(int, int) 是一個型別，func1Ptr 是一個名稱，所以當指標函數搭配 typedef 使用後就可以讓整體程式碼看起來更簡潔。
 
 ## 4. 呼叫 dll (動態函式庫)
-在 windows 很多應用程式中都會有包含 .dll 這個檔案，全名為 dynamic-link library。顧名思義當使用到的時候我們會去開一個記憶體位置，將該記憶體位置指向 .dll 裡面的函數拿出來使用，以下就給一個 C 語言呼叫 .dll 的方法。
+在 windows 很多應用程式中都會有包含 .dll 這個檔案，全名為 dynamic-link library，而在 linux 中稱為 shared-library，副檔名為 .so。顧名思義當使用到的時候我們會去開一個記憶體位置，將該記憶體位置指向 .dll/.so 裡面的函數拿出來使用，以下就給一個 C 語言呼叫 .dll/.so 的方法。
+#### 1. Windows 中呼叫 .dll 檔
 ```C
 #include <stdio.h>
 #include <windows.h>  //此為呼叫 .dll 所需之標頭檔
-typedef struct
-{
-    int x;
-    int y;
-}Point;
-typedef void (*DLLshow_point)(Point point);
-typedef void (*DLLmove_point)(Point point);
-typedef void (*DLLmove_point_by_ref)(Point *point);
-typedef Point (*DLLget_point)(void);
+
+typedef void (*func)(char *, int);
 //在此我們必須先知道 .dll 裡面的函數原型長得如何，當然也可以不用 typedef，只是寫起來就比較冗長不易讀。
 HINSTANCE hDll;  //此為需要讀取 .dll 檔案的型別
-DLLshow_point show_point;
-//在此宣告了一個指標函數，其型別為 void (*)(Point point)，以下類推。
-DLLmove_point move_point;
-DLLmove_point_by_ref move_point_by_ref;
-DLLget_point get_point;
+func example;
+//在此宣告了一個指標函數，其型別為 void (*)(char *, int)。
 int main()
 {
-    hDll = LoadLibrary("call struct by python.dll");
+    hDll = LoadLibrary("call.dll");
     if(hDll == NULL) printf("no dll");
-    show_point = (DLLshow_point)GetProcAddress(hDll, "show_point");
+    example = (func)GetProcAddress(hDll, "example");
     //這個意思是 .dll 裡面有個函數名稱為 show_point，然後放進 show_point 這個指標內。
-    move_point = (DLLmove_point)GetProcAddress(hDll, "move_point");
-    move_point_by_ref = (DLLmove_point_by_ref)GetProcAddress(hDll, "move_point_by_ref");
-    Point point = {1, 2};
-    show_point(point);
-    move_point_by_ref(&point);
-    show_point(point);
+    char name[] = "JrPhy";
+    if (example) {
+        example(name, 123);  // I am JrPhy, do i=123
+    }
     FreeLibrary(hDll);
     //因為是動態宣告，所以記得最後要使用 FreeLibrary 函數 free 記憶體。
     return 0;
 }
 ```
+```C
+void example(char *name, int i)
+{
+	printf("I am %s, do i=%d\n", name, i);
+}
+```
+#### 2. linux 中呼叫 .so 檔
+```C
+#include <stdlib.h>
+#include <stdio.h>
+#include <dlfcn.h> //此為呼叫 .dll 所需之標頭檔
 
+int main(int argc, char **argv) {
+    void *handle;
+    void (*func)(char *, int);
+    char *error;
+
+    handle = dlopen("./libso.so", RTLD_LAZY);
+    if (!handle) {
+        fputs (dlerror(), stderr);
+        exit(1);
+    }
+
+    func = (void(*)(char *, int))dlsym(handle,"bejo_lib");
+    if ((error = dlerror()) != NULL)  {
+        fputs(error, stderr);
+        exit(1);
+    }
+    char name[] = "test";
+    if (func) {
+        func(name, 999);
+    }
+    dlclose(handle);
+}
+```
+```C
+extern "C" {
+void bejo_lib(char *name, int i)
+{
+	printf("I am %s, do i=%d\n", name, i);
+}
+}
+使用 dlfnc 時一定要有 extern "C"
+```
 ## 5. 善用指標函數減少程式碼
 在某些例子中，我們會需要使用一個 FLAG 來決定需要呼叫哪支函數，例如
 ```C
