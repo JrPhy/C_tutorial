@@ -141,7 +141,7 @@ int main()
     return 0;
 }
 
-int max(int a, int b  //此為函數的定義或實作
+int max(int a, int b)  //此為函數的定義或實作
 {
     if(a >= b) return a;
     else return b;
