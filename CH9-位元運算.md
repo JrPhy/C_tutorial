@@ -138,7 +138,7 @@ void swap(int *a, int *b)
 1. 交換律 A^B = B^A
 2. 結合律 A^B^C = A^(B^C)
 3. 單位元素 A^0 = 0^A = A
-4. 反元素 A^A = 0
+4. 反元素 A^A = 0 \
 可以利用這個特點來找出[不重複的元素 leetcode Single Number](https://leetcode.com/problems/single-number/)。
 ```C
 int singleNumber(int[] nums) {
