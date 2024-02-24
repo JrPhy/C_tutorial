@@ -93,24 +93,7 @@ x &= ~(n << 3);  將 x 的第 4~6 為設成 0
 ```
 在一些儀控的產品裡面，因為記憶體不多，所以常會使用某塊記憶體中的某個位元來當作開關。
 ## 4. 位元運算應用
-#### 1. 加法
-因為在二進位的世界只有 0 與 1，所以在二進位的世界中，01<sub>2</sub> + 01<sub>2</sub> = 10<sub>2</sub>，00<sub>2</sub> + 00<sub>2</sub> = 00<sub>2</sub>，01<sub>2</sub> + 00<sub>2</sub> = 01<sub>2</sub>，01<sub>2</sub> + 00<sub>2</sub> = 01<sub>2</sub>。所以可知加法運算中，第一位對應到的運算為 XOR 運算，再來當需要進位的情況就是當同位數字皆為 1 時，即為 AND 運算，然後再左移 1 bit，故整段 code 為
-```C
-int bitAdd(int a, int b)
-{
-    while (b != 0) 
-    {
-        unsigned int x = (unsigned int)a ^ (unsigned int)b;
-        unsigned int y = ((unsigned int)a & (unsigned int)b) << 1; 
-        a = x;
-        b = y;
-    }
-    return a;
-}
-```
-此算法在不溢位的情況下，a、b 為負數也能正確計算。
-
-#### 2. 取餘數
+#### 1. 取餘數
 已知 a 對 b 取餘數的結果為 r ，且 **b ∈ 2<sup>n</sup>**，n ∈ Z+，寫作 a%b，則有以下關係：a = b* q + r，其中 a 為被除數，b 為除數，q 為商數，r 為餘數，r < b。舉例來說，11 對 3 取餘數為 2，則 11 = 3* 3 + 2。當我們使用二進位來看時\
 ...11 = 1011\
 % 3 = 0011\
@@ -118,6 +101,21 @@ int bitAdd(int a, int b)
 .....2 = 0010\
 又 r < b，故只要將 a&(b-1) 就能得到 a%b，其中 **b ∈ 2<sup>n</sup>**。在未被優化的結果下，位元運算的結果會比直接使用 % 快 20~25%。\
 註：若是要利用此方法來判斷餘數為多少時執行的敘述記得要加括號，因為 & 的優先序低於 == ```if((n&7) == 5)```。
+
+#### 2. 計算某數有幾個 bit 為 1
+已知對於任意二進位整數 n，n > 0，至少有 1 個 bit 為 1，先考慮 n = 8 = 2<sup>3</sup> = 1000<sub>2</sub>，當我們取 n & (n-1) 可得 (1000<sub>2</sub>) & (0111<sub>2</sub>) = 0，所以可知對於 n = 2<sup>k</sup> 可這樣做。而對於 n =/= 2<sup>k</sup> 時，設 n = 9 = 1001<sub>2</sub>，則 n & (n-1) = (1001<sub>2</sub>) & (1000<sub>2</sub>) = 1000<sub>2</sub>，最後一步都會到 n = 2<sup>k</sup> 的例子，故可知此算法可行。
+```C
+int bitcount(unsigned int n)
+{
+   int count = 0 ;
+   while (n)
+   {
+      count++ ;
+      n = n&(n - 1);
+   }
+   return count ;
+}
+```
 
 #### 3. 交換兩數
 在先前我們知道要將兩數傳入某函數後交換其數值的方式，在此我們也可以用位元運算來達成此結果。有兩數 a，b。若要將 a 的數值經由位元運算變成 b 且不另外宣告新的變數，先從數學上來看\
@@ -135,17 +133,38 @@ void swap(int *a, int *b)
 ```
 若是整數的變數交換，可使用位元運算的方式。而若是浮點數運算，當兩數差異很大時會有捨入誤差，故這兩種做法雖然是 in-place 的方法，但仍有其限制存在。
 
-#### 4. 計算某數有幾個 bit 為 1
-已知對於任意二進位整數 n，n > 0，至少有 1 個 bit 為 1，先考慮 n = 8 = 2<sup>3</sup> = 1000<sub>2</sub>，當我們取 n & (n-1) 可得 (1000<sub>2</sub>) & (0111<sub>2</sub>) = 0，所以可知對於 n = 2<sup>k</sup> 可這樣做。而對於 n =/= 2<sup>k</sup> 時，設 n = 9 = 1001<sub>2</sub>，則 n & (n-1) = (1001<sub>2</sub>) & (1000<sub>2</sub>) = 1000<sub>2</sub>，最後一步都會到 n = 2<sup>k</sup> 的例子，故可知此算法可行。
+#### 4. 找出陣列中唯一不重複的元素
+若為重複元素，則在做 NOR 時會變成 0，且滿足以下性質：
+1. 交換律 A^B = B^A
+2. 結合律 A^B^C = A^(B^C)
+3. 單位元素 A^0 = 0^A = A
+4. 反元素 A^A = 0
+可以利用這個特點來找出[不重複的元素 leetcode Single Number](https://leetcode.com/problems/single-number/)。
 ```C
-int bitcount(unsigned int n)
-{
-   int count = 0 ;
-   while (n)
-   {
-      count++ ;
-      n = n&(n - 1);
-   }
-   return count ;
+int singleNumber(int[] nums) {
+    int xor = 0;
+    for (int i : nums) {
+        xor ^= i; // xor = xor ^ i
+    }
+    return xor;
 }
 ```
+xor = xor ^ i 做完第一次後就會變成 i，之後就對下一個數做 NOR。所以對於一個亂序且只有一個不重複元素的數列，可用此方法找出。
+例如 nums = [2, 1, 4, 2, 1] 即為 2^1^4^2^1，先利用交換律變成 4^2^2^1^1，再用結合律變成 4^(2^2)^(1^1)，再根據單位元素和反元素可以得到 4^0^0 = 4
+
+#### 5. 加法
+因為在二進位的世界只有 0 與 1，所以在二進位的世界中，01<sub>2</sub> + 01<sub>2</sub> = 10<sub>2</sub>，00<sub>2</sub> + 00<sub>2</sub> = 00<sub>2</sub>，01<sub>2</sub> + 00<sub>2</sub> = 01<sub>2</sub>，01<sub>2</sub> + 00<sub>2</sub> = 01<sub>2</sub>。所以可知加法運算中，第一位對應到的運算為 XOR 運算，再來當需要進位的情況就是當同位數字皆為 1 時，即為 AND 運算，然後再左移 1 bit，故整段 code 為
+```C
+int bitAdd(int a, int b)
+{
+    while (b != 0) 
+    {
+        unsigned int x = (unsigned int)a ^ (unsigned int)b;
+        unsigned int y = ((unsigned int)a & (unsigned int)b) << 1; 
+        a = x;
+        b = y;
+    }
+    return a;
+}
+```
+此算法在不溢位的情況下，a、b 為負數也能正確計算。
