@@ -50,14 +50,14 @@ struct student
 上面這段宣告了 peter 這個變數，類別為 struct competitor。而結構內變數賦值可以在一開始宣告時就直接給，也可以宣告完後再給。在宣告時各成員用分號分開，但是賦值時以`,逗號`分開，其賦值方式有以下幾種：
 1. 照順序給值
 ```C
-struct student peter = {“890229", 10039, 88.88};
+struct student peter = {"890229", 10039, 88.88};
 ```
 2. 照成員名稱給值(不須照順序)
 ```C
 struct student peter = 
 {
     .id = 10039,
-    .birthday = “890229",
+    .birthday = "890229",
     .score = 88.88,
 };
 ```
@@ -90,13 +90,13 @@ struct student {
 ```
 賦值方式如下：
 ```C
-struct competitor peter = {“890229", 10039, {3, 88.88}};
+struct competitor peter = {"890229", 10039, {3, 88.88}};
 ```
 ```C
 struct student peter = 
 {
     .id = 10039,
-    .birthday = “890229",
+    .birthday = "890229",
     .math.rank = 3,
     .math.point = 88.88,
 };
