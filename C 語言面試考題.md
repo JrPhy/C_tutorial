@@ -35,3 +35,30 @@ printf("5. %c\n", *p + 1);  //str[2] 的第四個元素的值 + 1，也就是 o 
 [利用 NOR 運算及其性質來找出陣列中唯一不重複的元素](https://github.com/JrPhy/C_tutorial/blob/main/CH9-%E4%BD%8D%E5%85%83%E9%81%8B%E7%AE%97.md#4-%E6%89%BE%E5%87%BA%E9%99%A3%E5%88%97%E4%B8%AD%E5%94%AF%E4%B8%80%E4%B8%8D%E9%87%8D%E8%A4%87%E7%9A%84%E5%85%83%E7%B4%A0)
 
 #### 2. 
+
+## 3. 進位至轉換
+#### 1. 十進位轉十六進位
+```c
+
+#include <stdio.h>
+void dec2hex(int num, char hex[])
+{
+    char arr[] = "0123456789ABCDEF";
+    int i = 0, j = 0, a = 0;
+    a = num;
+    while (num)
+    {
+        hex[i++] = arr[num % 16];
+        num = num >> 4;
+    }
+    hex[i] ='\0';
+}
+int main()
+{
+    int num = 255;
+    char hex[16];
+    dec2hex(num, hex);
+    printf("dec %d to hex is: %s", a, hex);
+    return 0;
+}
+```
