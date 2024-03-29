@@ -59,6 +59,7 @@ int main()
     char hex[16];
     dec2hex(num, hex);
     printf("dec %d to hex is: %s", num, hex);
+    //sprintf(hex, "%x", num);
     return 0;
 }
 ```
