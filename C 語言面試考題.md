@@ -58,7 +58,7 @@ int main()
     int num = 255;
     char hex[16];
     dec2hex(num, hex);
-    printf("dec %d to hex is: %s", a, hex);
+    printf("dec %d to hex is: %s", num, hex);
     return 0;
 }
 ```
