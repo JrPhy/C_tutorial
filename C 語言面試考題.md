@@ -45,10 +45,10 @@ void dec2hex(int num, char hex[])
     if (!num) {
         hex[0] = '0';
         hex[1] = '\0';
-        return;
+        return hex;
     }
-    char arr[] = "0123456789ABCDEF";
-    int i = 0, j = 0;
+    char arr[] = "0123456789abcdef";
+    int i = 0;
     unsigned int a = num;
     while (a)
     {
@@ -56,6 +56,12 @@ void dec2hex(int num, char hex[])
         a = a >> 4;
     }
     hex[i] ='\0';
+    for (int k = 0, j = i - 1; k <= j; k++, j--) {
+        // swapping characters
+        char c = hex[k];
+        hex[k] = hex[j];
+        hex[j] = c;
+    }
 }
 int main()
 {
