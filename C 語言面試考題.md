@@ -63,3 +63,26 @@ int main()
     return 0;
 }
 ```
+
+## 4. MAP
+#### 1. 找出 <= k 以內的質數和
+可以先建立一個大小為 k+1 的陣列並都設為 0，然後從 2 開始找，把 index 為 2 的倍數的都設為 1，之後只須看陣列值不為 0 的即可，每個都這樣設，直到 i <= sqrt(k) 為止，因為 k 的最大因數為 sqrt(k)，最後把陣列值為 0 的 index 加起來即可
+
+int sumPrimes(int n) {
+    if(n <= 2) return 0;
+    int sum = 0;
+    int primeMap[100] = {0};
+    // if i is NOT prime, then set index = 1
+    for(int i = 2; i* i <= n; i++) {
+        if(primeMap[i] == 0) {
+            for(int j = i*i; j <= n; j += i) {
+                primeMap[j] = 1;
+            }
+        }
+    }
+    // sum the prime
+    for(int i = 2; i < n+1; i++)
+        if(primeMap[i] == 0)
+            sum = sum+i;
+    return sum;
+}
