@@ -39,17 +39,21 @@ printf("5. %c\n", *p + 1);  //str[2] 的第四個元素的值 + 1，也就是 o 
 ## 3. 進位至轉換
 #### 1. 十進位轉十六進位
 ```c
-
 #include <stdio.h>
 void dec2hex(int num, char hex[])
 {
+    if (!num) {
+        hex[0] = '0';
+        hex[1] = '\0';
+        return;
+    }
     char arr[] = "0123456789ABCDEF";
-    int i = 0, j = 0, a = 0;
-    a = num;
-    while (num)
+    int i = 0, j = 0;
+    unsigned int a = num;
+    while (a)
     {
-        hex[i++] = arr[num % 16];
-        num = num >> 4;
+        hex[i++] = arr[a & (15)];
+        a = a >> 4;
     }
     hex[i] ='\0';
 }
@@ -65,11 +69,11 @@ int main()
 ```
 
 ## 4. MAP
-#### 1. 找出 <= k 以內的質數和
+#### 1. 找出 < k 以內的質數和
 可以先建立一個大小為 k+1 的陣列並都設為 0，然後從 2 開始找，把 index 為 2 的倍數的都設為 1，之後只須看陣列值不為 0 的即可，每個都這樣設，直到 i <= sqrt(k) 為止，因為 k 的最大因數為 sqrt(k)，最後把陣列值為 0 的 index 加起來即可
-
+```cpp
 int sumPrimes(int n) {
-    if(n <= 2) return 0;
+    if(n < 2) return 0;
     int sum = 0;
     int primeMap[100] = {0};
     // if i is NOT prime, then set index = 1
@@ -86,3 +90,4 @@ int sumPrimes(int n) {
             sum = sum+i;
     return sum;
 }
+```
