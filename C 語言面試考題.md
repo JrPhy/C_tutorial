@@ -45,7 +45,7 @@ void dec2hex(int num, char hex[])
     if (!num) {
         hex[0] = '0';
         hex[1] = '\0';
-        return hex;
+        return;
     }
     char arr[] = "0123456789abcdef";
     int i = 0;
