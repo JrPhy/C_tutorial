@@ -277,7 +277,7 @@ double mean1(double *series, int length)
 
 double std1(double *series, int length) 
 {
-    double a = 0.0, b;
+    double a = 0.0, b = 0.0;
     for(int i = 0; i < length; i++) 
     {
         a += series[i]*series[i];
