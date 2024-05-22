@@ -165,3 +165,16 @@ int main()
     return 0;
 }
 ```
+#### 1. 與 #define 的差異
+const 變數在變編譯後會確實生成一個位置，也會占用記憶體。而 #define 則是會直接把該字段取代，並不會占用記憶體。
+| 程式碼 | 組語 | 
+| --- | --- |
+| #define a 10 | pushq   %rbp |
+| int b, c; | movq    %rsp, %rbp |
+| const int d = 5; | movq    %rsp, %rbp |
+| int main(void) { | movl    $10, b(%rip) |
+|     b = a; | movl    $10, b(%rip) |
+|     c = d; | movl    $5, %eax |
+|            | movl    %eax, c(%rip) |
+| } | popq    %rbp |
+可以看到若用 #define，a 會直接被改成 10。而 d 還是會占用一個空間，然後再把 d 的值搬到一個暫存器，會有兩個指令。所以在一些很低階的 MCU 中，#define 會比 const 常用
