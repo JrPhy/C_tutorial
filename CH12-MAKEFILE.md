@@ -57,7 +57,10 @@ default: main
 main: main.i main.s main.o
 	$(CC) -o main main.o $(FLAG) -I$(path)/include -L$(path)/lib
 ```
-這樣在執行 ```make``` 時就會使用 gcc 編譯器，以及引入 project 下的 header 與 lib。在變數中有個特別的變數 $(MAKE)，可以算是 makefile 的保留字，常搭配 -C 這個選項，會進去子目錄中執行裡面的 makefile。在[文件](https://github.com/yyluoyong/Make-3.8-Chinese-Manuals/blob/master/main.pdf)中有個例子
+這樣在執行 ```make``` 時就會使用 gcc 編譯器，以及引入 project 下的 header 與 lib。
+
+#### 1. $(MAKE)
+在變數中有個特別的變數 $(MAKE)，可以算是 makefile 的保留字，常搭配 -C 這個選項，會進去子目錄中執行裡面的 makefile。在[文件](https://github.com/yyluoyong/Make-3.8-Chinese-Manuals/blob/master/main.pdf)中有個例子
 ```
 #maindir Makefile
 ………
@@ -81,6 +84,9 @@ subdir makelevel = 1
 make[1]: Leaving directory `/…../ subdir '
 ```
 當專案夠大時就可以使用 $(MAKE) 變數來減少 makefile 寫的內容。
+
+#### 2. $(CC), $(CXX)
+在 makefile 中保留給 gcc 與 g++，也有對應的 $(CFLAGS), $(CXXFLAGS)，分別對應 gcc 與 g++ 的 flags
 
 ## 3. $@, $^, $<, $?, %
 第一次看到這東西應該滿多人以為是亂碼的，但這個在 makefile 中分別有以下意思
@@ -126,7 +132,22 @@ clean:
 ```
 
 ## 4. 流程
+在 makefile 中有四種 if，結尾搭配 endif 來用
+| 關鍵字 | 用法 | 意思 |
+| --- | --- | --- |
+| ifeq | ifeq(A, B) | 兩者**相同**為 true |
+| ifneq | ifneq(A, B)  | 兩者**不同**為 true |
+| ifdef | ifdef(A, B)  | 有值為 true |
+| ifndef | ifndef(A, B)  | 沒值為 true |
 
+```
+...
+ifeq($(CC), gcc)
+@echo "use gcc"
+else
+@echo "use g++"
+endif
+```
 
 ## 5. 一些 flags
 make -j 多核編譯
