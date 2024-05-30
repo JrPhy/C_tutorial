@@ -124,3 +124,11 @@ divide.o: divide.c
 clean:
 	rm *.o main
 ```
+
+## 4. 流程
+
+
+## 5. 一些 flags
+make -j 多核編譯
+make -f 指定跑哪個 makefile
+make -C $(sub_dir) 進入 sub_dir 去跑 makefile
