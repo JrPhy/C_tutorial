@@ -85,8 +85,18 @@ make[1]: Leaving directory `/…../ subdir '
 ```
 當專案夠大時就可以使用 $(MAKE) 變數來減少 makefile 寫的內容。
 
-#### 2. ```$(CC), $(CXX)```
-在 makefile 中保留給 gcc 與 g++，也有對應的 $(CFLAGS), $(CXXFLAGS)，分別對應 gcc 與 g++ 的 flags
+#### 2. 其他保留變數
+在 makefile 中把 ```$(CC)``` 保留給 gcc，```$(CXX)``` 保留給 g++，也有對應的 ```$(CFLAGS), $(CXXFLAGS)```，分別對應 gcc 與 g++ 的 flags，也就是 -o, -c -DDEBUG 這些選項。另外還有 ```$(OS)```，可以搭配 ifeq 拿來寫跨平台的 MAKEFILE。
+
+#### 3. 賦值
+| = | := | ?= | += |
+| --- | --- | --- | --- |
+| 基本的賦值 | 覆蓋之前的值 | 如果未定義就給等號後面的值 | 加等號後面的值 |
+| x = foo | x := foo | 如果未定義就給等號後面的值 | 加等號後面的值 |
+| y = $(x) bar | y := $(x) bar | 如果未定義就給等號後面的值 | 加等號後面的值 |
+| x = abc | x := abc | 如果未定義就給等號後面的值 | 加等號後面的值 |
+
+上述中如果單純用 = 賦值，那麼 y 為 abc bar。若用 := 賦值，那麼 y 為 foo bar。
 
 ## 3. ```$@, $^, $<, $?```
 第一次看到這東西應該滿多人以為是亂碼的，但這個在 makefile 中分別有以下意思
@@ -141,14 +151,30 @@ clean:
 | ifndef | ifndef(A, B)  | 沒值為 true |
 
 ```
-...
-ifeq($(CC), gcc)
-@echo "use gcc"
+# Detect underlying system.
+ifeq ($(OS),Windows_NT)
+	detected_OS := Windows
 else
-@echo "use g++"
+	detected_OS := $(shell sh -c 'uname -s 2>/dev/null || echo not')
 endif
-```
 
+export detected_OS
+
+# Set default C compiler.
+# Clean implict CC variable.
+CC=
+
+ifndef CC
+	ifeq ($(detected_OS),Windows)
+		CC=cl
+	else ifeq ($(detected_OS),Darwin)
+		CC=clang
+	else
+		CC=gcc
+	endif
+endif  # CC
+```
+上面的寫法會先根據 $(OS) 來取得是在哪個平台，然後定義平台的名稱。因為不同平台常用的 C 編譯器也不一定相同，所以再根據平台去設定使用的 C 編譯器。
 ## 5. 一些 flags
 | 多核編譯 -j | 指定跑哪個 makefile -f | 進入 sub_dir 去跑 makefile -C |
 | --- | --- | --- |
