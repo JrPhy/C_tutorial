@@ -60,7 +60,10 @@ add_executable(ex2 main.c calc.c) # 把那些檔案編成執行檔
 當然也有可能有好幾個執行檔，可以參考我的 [tcpip repo](https://github.com/JrPhy/tcpip/blob/main/CMakeLists.txt)
 
 ## 3. 編譯與連結函式庫
-在大型專案中有可能會將某個檔案編成函式庫，cmake 中使用 ```add_library(<name> <SHARED|STATIC|MODULE|INTERFACE> <sources>...)``` 來將原始檔編成函式庫， STATIC 就是編成 .a， SHARED 編成 .so，其餘兩個不常用到。在編譯成函式庫 cmake 會在名稱前綴加上 lib，所以 name 就不用再另外加 lib
+在大型專案中有可能會將某個檔案編成函式庫或是使用第三方函式庫，cmake 中使用 ```add_library(<name> <SHARED|STATIC|MODULE|INTERFACE> <sources>...)``` 來將原始檔編成函式庫， STATIC 就是編成 .a， SHARED 編成 .so，其餘兩個不常用到。並利用 ```find_package``` 來連結第三方函式庫。
+
+#### 1. 自己的函式庫
+在編譯成函式庫 cmake 會在名稱前綴加上 lib，所以 name 就不用再另外加 lib
 ```
 add_library(add STATIC add.c) # 產生 libadd.a
 add_library(divide SHARED divide.c) # 產生 libdivide.so
@@ -88,4 +91,28 @@ Scanning dependencies of target server_thread
 [ 87%] Building C object CMakeFiles/server_thread.dir/server_thread.c.o
 [100%] Linking C executable server_thread
 [100%] Built target server_thread
+```
+#### 2. find_package
+如果是要用第三方的函式庫，可以利用 ```find_package(<name> ...)```，後面有許多選項可以加，比較常用到是 [REQUIRED] 或 [version]。例如要使用多執行緒，那麼可以先看看是否有內建 Thread
+```
+find_package(Threads REQUIRED)
+```
+```
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE
+```
+執行時就會去找相關的第三方函式庫，若沒找到就會出錯。
+## 4. 變數與函數
+CMake 的變數常用在設定路徑與 FLAG，利用 set(name, value) 來宣告，${name} 來取值
+```
+set(SRC_DIR src)
+set(LIB_DIR libs)
+set(INC_DIR include)
 ```
