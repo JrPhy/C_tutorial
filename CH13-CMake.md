@@ -1,7 +1,7 @@
-MAKEFILE 拿來編譯專案很方便，但是 MAKEFILE 卻不太好撰寫，而且專案一大要改也不容易，所以就有 CMake 誕生。CMake 的語法較 MAKEFILE，且跨平便建置很方便，現今大型的專案也都支援用 CMake 建置。
+MAKEFILE 拿來編譯專案很方便，但是 MAKEFILE 卻不太好撰寫，而且專案一大要改也不容易，更不用說一個專案要可以跨平台使用，如果要在一個專案中加入某個檔案，那就需要去修改其編譯文件。CMake 的誕生解決了這問題，我們只需要撰寫一個 CMakeLists.txt，就會根據平台生成不同的編譯文件，現今大型的專案也都支援用 CMake 建置，如 OpenCV，不論是在 WIN32, LINUX, ANDROID 或是 ARM，都可以輕鬆的建置跟編譯，可以參考[這篇文章](https://www.jb51.net/article/274466.htm)的圖。
 
 ## 1. 使用
-CMake 會去讀取 CMakeList.txt，此檔案通常與源碼在同個目錄下，並會另外建立 build，這樣可以把原始碼與執行檔分開，會讓專案更乾淨。進入 build 後執行 cmake .. 就會生成建置檔案，最後在 make 即可開始編譯。所以在安裝時通常會有以下三行命令
+CMake 會去讀取 CMakeLists.txt，此檔案通常與源碼在同個目錄下，並會另外建立 build，這樣可以把原始碼與執行檔分開，會讓專案更乾淨。進入 build 後執行 cmake .. 就會生成建置檔案，最後在 make 即可開始編譯。所以在安裝時通常會有以下三行命令
 ```
 mkdir build && cd build
 cmake ../
@@ -57,7 +57,7 @@ cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
 project(ex2) # 專案名稱
 add_executable(ex2 main.c calc.c) # 把那些檔案編成執行檔
 ```
-當然也有可能有好幾個執行檔，可以參考我的 [tcpip repo](https://github.com/JrPhy/tcpip/blob/main/CMakeLists.txt)
+當然也有可能有好幾個執行檔，可以參考 [tcpip repo](https://github.com/JrPhy/tcpip/blob/main/CMakeLists.txt)
 
 ## 3. 編譯與連結函式庫
 在大型專案中有可能會將某個檔案編成函式庫或是使用第三方函式庫，cmake 中使用 ```add_library(<name> <SHARED|STATIC|MODULE|INTERFACE> <sources>...)``` 來將原始檔編成函式庫， STATIC 就是編成 .a， SHARED 編成 .so，其餘兩個不常用到。並利用 ```find_package``` 來連結第三方函式庫。
@@ -68,10 +68,14 @@ add_executable(ex2 main.c calc.c) # 把那些檔案編成執行檔
 add_library(add STATIC add.c) # 產生 libadd.a
 add_library(divide SHARED divide.c) # 產生 libdivide.so
 ```
-再來把 library 跟 header 檔都加入進執行檔內，header 通常是放在 include，是用 ```link_directories(directory1 directory2 ...)``` 來選資料夾
+再來把 library 跟 header 檔都加入進執行檔內，分別使用 link_directories 與 include_directories 來將需要的函式庫與 header 位置加入，header 通常是放在 include，是用 ```link_directories(directory1 directory2 ...)``` 來選資料夾，也可以用 target_link_libraries 來指定函式庫
 ```
-TARGET_LINK_LIBRARIES(server_thread add)
+include_directories(${PROJECT_NAME})
+# 相當於 gcc -I$(PROJECT_NAME)
 link_directories(${PROJECT_NAME})
+# 相當於 gcc -L$(PROJECT_NAME)
+target_link_libraries(server_thread add)
+# 相當於 gcc -o server_thread server_thread.c -ladd.a
 ```
 這樣在 make 的時候就會 link 進去了
 ```
@@ -92,7 +96,45 @@ Scanning dependencies of target server_thread
 [100%] Linking C executable server_thread
 [100%] Built target server_thread
 ```
-#### 2. find_package
+#### 2. add_subdirectory
+通常專案會將大部分的 .c, .cpp 文件放入 src 資料夾中，.h 放入 include 中(也有少數的 .cpp)，當然也可以指定 src 下的原始碼，不過我們也可以在 src 中另外寫個 CMakeLists.txt，然後將最上層的 CMakeLists.txt 加上
+```
+add_subdirectory(src)
+```
+剩下的放進 src/CMakeLists.txt 中。這樣就會自動去跑 src 中的 CMakeLists.txt 了。
+tcpip/
+├── CMakeLists.txt
+├── Makefile
+├── README.md
+├── build
+├── include
+│   └── add.h
+└── src
+    ├── CMakeLists.txt
+    ├── add.c
+    ├── client_thread.c
+    ├── divide.c
+    └── server_thread.c
+CMakeLists.txt
+```
+cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
+project(tcpip) # 專案名稱
+add_subdirectory(src)
+```
+src/CMakeLists.txt
+```
+add_executable(server_thread server_thread.c) # 把那些檔案編成執行檔
+add_executable(client_thread client_thread.c) # 把那些檔案編成執行檔
+add_library(add STATIC add.c) # 把 add.c 編成 libadd.a
+add_library(divide SHARED divide.c) # 把 divide.c 編成 libdivide.so
+set_target_properties(server_thread client_thread PROPERTIES
+    COMPILE_FLAGS "-pthread"
+    LINK_FLAGS "-pthread"
+)
+include_directories(${PROJECT_NAME})
+link_directories(${PROJECT_NAME})
+```
+#### 3. find_package
 如果是要用第三方的函式庫，可以利用 ```find_package(<name> ...)```，後面有許多選項可以加，比較常用到是 [REQUIRED] 或 [version]。例如要使用多執行緒，那麼可以先看看是否有內建 Thread
 ```
 find_package(Threads REQUIRED)
@@ -108,11 +150,20 @@ find_package(Threads REQUIRED)
 -- Looking for pthread_create in pthread - found
 -- Found Threads: TRUE
 ```
-執行時就會去找相關的第三方函式庫，若沒找到就會出錯。
-## 4. 變數與函數
-CMake 的變數常用在設定路徑與 FLAG，利用 set(name, value) 來宣告，${name} 來取值
+執行時就會去找相關的第三方函式庫，若沒找到就會出錯。如果是另外下載第三方函式庫如 OpenCV，那就會另外開一個 cmake 資料夾，裡面建立一個 FindOpenCV.cmake，使得整個專案較有秩序。
+
+## 4. 變數
+CMake 的變數常用在設定路徑與 FLAG，利用 set(name, value) 來宣告，${name} 來取值。如果有給 project({name}) 的話，那就可以用 ${PROJECT_NAME} 來取得專案名稱
 ```
-set(SRC_DIR src)
-set(LIB_DIR libs)
-set(INC_DIR include)
+set(SRC_DIR ${PROJECT_NAME}/src)
+set(LIB_DIR ${PROJECT_NAME}/libs)
+set(INC_DIR ${PROJECT_NAME}/include)
+set(SOURCE 
+    A.cpp
+    B.cpp)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb -D DEBUG")
 ```
+當然 CMake 中也有一些保留用的變數名稱，如 WIN32, APPLE, ANDROID 等常見的平台名稱，當然還有 CXX_FLAG 等。
+
+## 5. 流程控制
+如 makefile 一樣使用 if 與上述的平台變數來建立一個跨平台的 cmake。
