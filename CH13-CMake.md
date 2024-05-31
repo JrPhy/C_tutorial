@@ -7,7 +7,7 @@ mkdir build && cd build
 cmake ../
 make
 ```
-如果源碼有許多部分需要獨立編譯，並放在其他資料夾中，則每個獨立的部分都需要寫一個 CMakeList.txt。
+如果源碼有許多部分需要獨立編譯，並放在其他資料夾中，則每個獨立的部分都需要寫一個 CMakeList.txt。\
 cmake ../
 ```
 -- The C compiler identification is GNU 9.4.0
@@ -68,10 +68,10 @@ add_executable(ex2 main.c calc.c) # 把那些檔案編成執行檔
 add_library(add STATIC add.c) # 產生 libadd.a
 add_library(divide SHARED divide.c) # 產生 libdivide.so
 ```
-再來把 library 跟 header 檔都加入進執行檔內
+再來把 library 跟 header 檔都加入進執行檔內，header 通常是放在 include，是用 ```link_directories(directory1 directory2 ...)``` 來選資料夾
 ```
 TARGET_LINK_LIBRARIES(server_thread add)
-target_include_directories(add PUBLIC tcpip)
+link_directories(${PROJECT_NAME})
 ```
 這樣在 make 的時候就會 link 進去了
 ```
