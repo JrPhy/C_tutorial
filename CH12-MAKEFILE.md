@@ -1,4 +1,4 @@
-直接使用 gcc 做編譯在檔案一多時會變得很麻煩，所以在一些大型專案中就會看到 MAKEFILE，下載原始碼後只要下 ```make``` 或是 ```make all```就自動把整個專案編成執行檔了。當然內部還是依靠指令，只不過可以寫成類似函數的方式來讓使用者更方便。
+直接使用 gcc 做編譯在檔案一多時會變得很麻煩，所以在一些大型專案中就會看到 MAKEFILE，下載原始碼後只要下 ```make``` 或是 ```make all```就自動把整個專案編成執行檔了。當然內部還是依靠指令，只不過可以寫成類似函數的方式來讓使用者更方便。只有一個 makefile 的話會直接命名為 Makefile，有多個的話則會在副檔名加上 .mk
 
 ## 1. 語法
 主要由 target 和 command 組成，target 有點類似函數，當我們下 make ${target} 時就會去執行這個 target 下的 command，註解為 **#**。
@@ -150,6 +150,8 @@ endif
 ```
 
 ## 5. 一些 flags
-make -j 多核編譯
-make -f 指定跑哪個 makefile
-make -C $(sub_dir) 進入 sub_dir 去跑 makefile
+| 多核編譯 -j | 指定跑哪個 makefile -f | 進入 sub_dir 去跑 makefile -C |
+| --- | --- | --- |
+|     |     |     |
+
+make -j4 -C sub_dir -f makefile 表示使用 4 個 core 去跑 ./sub_dir/makefile
