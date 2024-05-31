@@ -51,10 +51,41 @@ Scanning dependencies of target server_thread
 這樣就會在 build 目錄下生成 server_thread 與 client_thread 兩個執行檔。
 
 ## 2. CMakeList.txt
-主要由以下幾個部分組成，真正有作用的只有 ```add_executable```，add_executable(<name> <options>... <sources>...)，會把原始碼編成執行檔，前面兩行皆可忽略。
+主要由以下幾個部分組成，真正有作用的只有 ```add_executable(<name> <options>... <sources>...)```，會把原始碼編成執行檔，前面兩行皆可忽略。
 ```
 cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
 project(ex2) # 專案名稱
 add_executable(ex2 main.c calc.c) # 把那些檔案編成執行檔
 ```
 當然也有可能有好幾個執行檔，可以參考我的 [tcpip repo](https://github.com/JrPhy/tcpip/blob/main/CMakeLists.txt)
+
+## 3. 編譯與連結函式庫
+在大型專案中有可能會將某個檔案編成函式庫，cmake 中使用 ```add_library(<name> <SHARED|STATIC|MODULE|INTERFACE> <sources>...)``` 來將原始檔編成函式庫， STATIC 就是編成 .a， SHARED 編成 .so，其餘兩個不常用到。在編譯成函式庫 cmake 會在名稱前綴加上 lib，所以 name 就不用再另外加 lib
+```
+add_library(add STATIC add.c) # 產生 libadd.a
+add_library(divide SHARED divide.c) # 產生 libdivide.so
+```
+再來把 library 跟 header 檔都加入進執行檔內
+```
+TARGET_LINK_LIBRARIES(server_thread add)
+target_include_directories(add PUBLIC tcpip)
+```
+這樣在 make 的時候就會 link 進去了
+```
+Scanning dependencies of target add
+[ 12%] Building C object CMakeFiles/add.dir/add.c.o
+[ 25%] Linking C static library libadd.a
+[ 25%] Built target add
+Scanning dependencies of target client_thread
+[ 37%] Building C object CMakeFiles/client_thread.dir/client_thread.c.o
+[ 50%] Linking C executable client_thread
+[ 50%] Built target client_thread
+Scanning dependencies of target divide
+[ 62%] Building C object CMakeFiles/divide.dir/divide.c.o
+[ 75%] Linking C shared library libdivide.so
+[ 75%] Built target divide
+Scanning dependencies of target server_thread
+[ 87%] Building C object CMakeFiles/server_thread.dir/server_thread.c.o
+[100%] Linking C executable server_thread
+[100%] Built target server_thread
+```
