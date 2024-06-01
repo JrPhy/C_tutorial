@@ -98,6 +98,19 @@ make[1]: Leaving directory `/…../ subdir '
 
 上述中如果單純用 = 賦值，那麼 y 為 abc bar。若用 := 賦值，那麼 y 為 foo bar。
 
+#### 4. 外部傳入
+makefile 也支援從命令行傳參數進去，例如我們想要從外面決定是否要開啟 DEBUG
+```
+CC = gcc
+path=/home/user/project
+FLAG += O3
+DEBUG =
+default: main
+main: main.i main.s main.o
+	$(CC) $(DEBUG) -o main main.o $(FLAG) -I$(path)/include -L$(path)/lib
+```
+執行 make DEBUG = -DDEBUG 就可以把 -DDEBUG 放入 DEBUG 中。
+
 ## 3. ```$@, $^, $<, $?```
 第一次看到這東西應該滿多人以為是亂碼的，但這個在 makefile 中分別有以下意思
 1. $@  表示目標文件
