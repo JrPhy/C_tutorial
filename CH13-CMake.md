@@ -123,8 +123,8 @@ add_subdirectory(src)
 ```
 src/CMakeLists.txt
 ```
-add_executable(server_thread server_thread.c) # 把那些檔案編成執行檔
-add_executable(client_thread client_thread.c) # 把那些檔案編成執行檔
+add_executable(server_thread server_thread.c) # 把 server_thread.c 編成執行檔
+add_executable(client_thread client_thread.c)
 add_library(add STATIC add.c) # 把 add.c 編成 libadd.a
 add_library(divide SHARED divide.c) # 把 divide.c 編成 libdivide.so
 set_target_properties(server_thread client_thread PROPERTIES
@@ -169,6 +169,20 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb -D DEBUG")
 #### 1. 外部傳入
 cmake 也可以像 makefile 一樣傳入變數，來決定是要建置 debug 或 release，像上方的 ```set(CMAKE_BUILD_TYPE Debug)``` 就是要做這件事，再命令行執行 ```cmake -DCMAKE_BUILD_TYPE=Release ..``` 就可以了。還有像指定安裝位置也常用 ```CMAKE_INSTALL_PREFIX ```，當然更常是搭配 if 做使用。
 
+## 5. 安裝目錄
+在建置好之後就開始編譯，編譯後的檔案通常會希望放在另外的地方，至少要跟原始碼分開放，所以一個大型專案會在分出以下資料夾
+| src | bin | lib | include |
+| --- | --- | --- | --- |
+| 原始碼 | 執行檔 | .a, .so | header |
+在最後使用 install，然後執行 make install 就會把那些檔案搬移到指定位置
+```
+install(TARGETS server_thread client_thread add divide
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    PUBLIC_HEADER DESTINATION include
+    )
+```
 ## 5. 流程控制
 如 makefile 一樣使用 if 與上述的平台變數來建立一個跨平台的 cmake。結構為
 ```
