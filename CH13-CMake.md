@@ -54,8 +54,8 @@ Scanning dependencies of target server_thread
 主要由以下幾個部分組成，真正有作用的只有 ```add_executable(<name> <options>... <sources>...)```，會把原始碼編成執行檔，前面兩行皆可忽略，# 為註解。
 ```
 cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
-project(ex2) # 專案名稱
-add_executable(ex2 main.c calc.c) # 把那些檔案編成執行檔
+project(math) # 專案名稱
+add_executable(ex2 main.c add.c) # 把那些檔案編成執行檔
 ```
 當然也有可能有好幾個執行檔，可以參考 [tcpip repo](https://github.com/JrPhy/tcpip/blob/main/CMakeLists.txt)
 
@@ -164,7 +164,14 @@ set(SOURCE
     B.cpp)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb -D DEBUG")
 ```
-最後一行的寫法是因為我們有可能從外部傳入參數，{} 後面就是預設的，傳進去的選項就會加在預設選項之前。當然 CMake 中也有一些保留用的變數名稱，如 WIN32, APPLE, ANDROID 等常見的平台名稱，當然還有 CXX_FLAG 等。
+最後一行的寫法是因為我們有可能從外部傳入參數，{} 後面就是預設的，傳進去的選項就會加在預設選項之前。當然 CMake 中也有一些保留用的變數名稱，如 WIN32, APPLE, ANDROID 等常見的平台名稱，當然還有 CXX_FLAG 等。下方列出一些常用的變數
+| 變數 | 用途 |
+| :--- | :--- |
+| PROJECT_NAME | 專案名 |
+| CMAKE_BINARY_DIR | 構建目錄 |
+| CMAKE_SOURCE_DIR | 專案根目錄 |
+| CMAKE_CURRRENT_BINARY_DIR | 所在的目錄 |
+| CMAKE_CURRENT_LIST_FILE | 當前 CMakeLists.txt 完整路徑 |
 
 #### 1. 外部傳入
 cmake 也可以像 makefile 一樣傳入變數，來決定是要建置 debug 或 release，像上方的 ```set(CMAKE_BUILD_TYPE Debug)``` 就是要做這件事，再命令行執行 ```cmake -DCMAKE_BUILD_TYPE=Release ..``` 就可以了。還有像指定安裝位置也常用 ```CMAKE_INSTALL_PREFIX ```，當然更常是搭配 if 做使用。
