@@ -12,11 +12,11 @@
 2. gcc -S main.i -o main.s --> 將上一步的文件編成組合語言
 3. gcc -c main.s -o main.o --> 將上一步的文件彙編成一個編譯單元
 4. gcc -o main main.o --> 將編譯單元編成可執行檔\
-，最後只會保留執行檔，上面的中間產物都不會保留。
+最後只會保留執行檔，上面的中間產物都不會保留。當然也可以直接 ```gcc main.c```，此時會產生一個 a.out 可執行文件。
 ```
-gcc -o add.c main.c -o add
+gcc -o main main.c add.c
 ```
-上方指令會將 add.c, main.c 兩個檔案編成一個可執行文件 add。若有很多個 .cpp 也可用 *.cpp 來取代。當然也可以直接 ```gcc main.c```，此時會產生一個 a.out 可執行文件。
+上方指令會將 add.c, main.c 兩個檔案編成一個可執行文件 add。若有很多個 .cpp 也可用 *.cpp 來取代。
 
 ## 2. 連結靜態庫與自訂 header
 除了標準函式庫以外，也常常用到別人的函式庫，就會有許多 .h, .o, .a(靜態函式庫), .so(動態函式庫)，這時就需要使用其他選項將他們編進執行檔中。除了自己寫的 main 與 add 外，還用到別人寫的 divide。gcc/g++ 中 -I 來指定要引入的 header，-l 來指定要引入的 .a，或是 -L(path) 來引入該 path 中的 lib 檔 (-I/-L 與檔案間沒有空格)。通常編成 .a 或 .so 前面會多個 lib，例如 libdivide.a 或是 libdivide.so，在編譯時寫其原本的名稱或是全名皆可。
