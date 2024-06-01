@@ -109,7 +109,7 @@ default: main
 main: main.i main.s main.o
 	$(CC) $(DEBUG) -o main main.o $(FLAG) -I$(path)/include -L$(path)/lib
 ```
-執行 make DEBUG = -DDEBUG 就可以把 -DDEBUG 放入 DEBUG 中。
+執行 make DEBUG = -DDEBUG 就可以把 -DDEBUG 放入 DEBUG 中，沒有傳的話就不開這選項。
 
 ## 3. ```$@, $^, $<, $?```
 第一次看到這東西應該滿多人以為是亂碼的，但這個在 makefile 中分別有以下意思
