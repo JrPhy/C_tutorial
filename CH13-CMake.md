@@ -51,7 +51,7 @@ Scanning dependencies of target server_thread
 這樣就會在 build 目錄下生成 server_thread 與 client_thread 兩個執行檔。
 
 ## 2. CMakeList.txt
-主要由以下幾個部分組成，真正有作用的只有 ```add_executable(<name> <options>... <sources>...)```，會把原始碼編成執行檔，前面兩行皆可忽略。
+主要由以下幾個部分組成，真正有作用的只有 ```add_executable(<name> <options>... <sources>...)```，會把原始碼編成執行檔，前面兩行皆可忽略，# 為註解。
 ```
 cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
 project(ex2) # 專案名稱
@@ -101,20 +101,20 @@ Scanning dependencies of target server_thread
 ```
 add_subdirectory(src)
 ```
-剩下的放進 src/CMakeLists.txt 中。這樣就會自動去跑 src 中的 CMakeLists.txt 了。
-tcpip/
-├── CMakeLists.txt
-├── Makefile
-├── README.md
-├── build
-├── include
-│   └── add.h
-└── src
-    ├── CMakeLists.txt
-    ├── add.c
-    ├── client_thread.c
-    ├── divide.c
-    └── server_thread.c
+剩下的放進 src/CMakeLists.txt 中。這樣就會自動去跑 src 中的 CMakeLists.txt 了。\
+tcpip/\
+├── CMakeLists.txt\
+├── Makefile\
+├── README.md\
+├── build\
+├── include\
+│   └── add.h\
+└── src\
+    ├── CMakeLists.txt\
+    ├── add.c\
+    ├── client_thread.c\
+    ├── divide.c\
+    └── server_thread.c\
 CMakeLists.txt
 ```
 cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
@@ -135,7 +135,7 @@ include_directories(${PROJECT_NAME})
 link_directories(${PROJECT_NAME})
 ```
 #### 3. find_package
-如果是要用第三方的函式庫，可以利用 ```find_package(<name> ...)```，後面有許多選項可以加，比較常用到是 [REQUIRED] 或 [version]。例如要使用多執行緒，那麼可以先看看是否有內建 Thread
+如果是要用第三方的函式庫，可以利用 ```find_package(<name> ...)```，後面有許多選項可以加，我比較常用到是 [REQUIRED] 或 [version]。例如要使用多執行緒，那麼可以先看看是否有內建 Thread
 ```
 find_package(Threads REQUIRED)
 ```
@@ -155,6 +155,7 @@ find_package(Threads REQUIRED)
 ## 4. 變數
 CMake 的變數常用在設定路徑與 FLAG，利用 set(name, value) 來宣告，${name} 來取值。如果有給 project({name}) 的話，那就可以用 ${PROJECT_NAME} 來取得專案名稱
 ```
+set(CMAKE_BUILD_TYPE Debug)
 set(SRC_DIR ${PROJECT_NAME}/src)
 set(LIB_DIR ${PROJECT_NAME}/libs)
 set(INC_DIR ${PROJECT_NAME}/include)
@@ -163,7 +164,53 @@ set(SOURCE
     B.cpp)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb -D DEBUG")
 ```
-當然 CMake 中也有一些保留用的變數名稱，如 WIN32, APPLE, ANDROID 等常見的平台名稱，當然還有 CXX_FLAG 等。
+最後一行的寫法是因為我們有可能從外部傳入參數，{} 後面就是預設的，傳進去的選項就會加在預設選項之前。當然 CMake 中也有一些保留用的變數名稱，如 WIN32, APPLE, ANDROID 等常見的平台名稱，當然還有 CXX_FLAG 等。
+
+#### 1. 外部傳入
+cmake 也可以像 makefile 一樣傳入變數，來決定是要建置 debug 或 release，像上方的 ```set(CMAKE_BUILD_TYPE Debug)``` 就是要做這件事，再命令行執行 ```cmake -DCMAKE_BUILD_TYPE=Release ..``` 就可以了。還有像指定安裝位置也常用 ```CMAKE_INSTALL_PREFIX ```，當然更常是搭配 if 做使用。
 
 ## 5. 流程控制
-如 makefile 一樣使用 if 與上述的平台變數來建立一個跨平台的 cmake。
+如 makefile 一樣使用 if 與上述的平台變數來建立一個跨平台的 cmake。結構為
+```
+if(...)
+    ...
+elseif(...)
+    ...
+else()
+    ...
+endif(...)
+```
+在寫 cmake 用於大型專案時，會根據以下順序來寫
+1. 決定安裝目錄
+2. 建置選項 (Debug, Release)
+3. 專案名稱
+4. 平台
+5. 編譯器
+在此用 [openCV](https://github.com/opencv/opencv/tree/4.x) 的例子來做說明，內部有個 CMakeLists.txt，內容有許多的 if 與變數。建置選項如果沒有特別指明，那就會以 **Release** 來做
+```
+if(NOT DEFINED CMAKE_BUILD_TYPE
+    AND NOT OPENCV_SKIP_DEFAULT_BUILD_TYPE
+)
+  message(STATUS "'Release' build type is used by default. Use CMAKE_BUILD_TYPE to specify build type (Release or Debug)")
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build")
+endif()
+if(DEFINED CMAKE_BUILD_TYPE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${CMAKE_CONFIGURATION_TYPES}")
+endif()
+```
+根據不同的平台選擇安裝目錄，安裝目錄就是讓編譯出來的函式庫與要使用的 header 檔放在另外一個資料夾，這樣在做修改時就是改該資料夾的內容。
+```
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)  # https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT.html
+  if(NOT CMAKE_TOOLCHAIN_FILE)
+    if(WIN32)
+      set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+    else()
+      set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation Directory" FORCE)
+    endif()
+  else()
+    # any cross-compiling
+    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+  endif()
+endif()
+```
+接著就去看是用哪個編譯器
