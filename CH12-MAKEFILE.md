@@ -63,15 +63,15 @@ main: main.i main.s main.o
 在變數中有個特別的變數 $(MAKE)，可以算是 makefile 的保留字，常搭配 -C 這個選項，會進去子目錄中執行裡面的 makefile。在[文件](https://github.com/yyluoyong/Make-3.8-Chinese-Manuals/blob/master/main.pdf)中有個例子
 ```
 #maindir Makefile
-………
-………
+...
+...
 .PHONY :test
 test:
 @echo “main makelevel = $(MAKELEVEL)”
 @$(MAKE) –C subdir dislevel
 #subdir Makefile
-………..
-………..
+...
+...
 .PHONY : test
 test :
 @echo “subdir makelevel = $(MAKELEVEL)”
