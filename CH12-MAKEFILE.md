@@ -79,9 +79,9 @@ test :
 執行的結果為
 ```
 main makelevel = 0
-make[1]: Entering directory `/…../ subdir '
+make[1]: Entering directory `/.../ subdir '
 subdir makelevel = 1
-make[1]: Leaving directory `/…../ subdir '
+make[1]: Leaving directory `/.../ subdir '
 ```
 當專案夠大時就可以使用 $(MAKE) 變數來減少 makefile 寫的內容。
 
