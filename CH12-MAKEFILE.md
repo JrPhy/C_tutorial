@@ -101,8 +101,8 @@ make[1]: Leaving directory `/.../ subdir '
 #### 4. 外部傳入
 makefile 也支援從命令行傳參數進去，例如我們想要從外面決定是否要開啟 DEBUG
 ```
-CC = gcc
-path=/home/user/project
+CC := gcc
+path := /home/user/project
 FLAG += O3
 DEBUG =
 default: main
@@ -111,47 +111,48 @@ main: main.i main.s main.o
 ```
 執行 make DEBUG = -DDEBUG 就可以把 -DDEBUG 放入 DEBUG 中，沒有傳的話就不開這選項。
 
-## 3. ```$@, $^, $<, $?```
+## 3. 特殊符號
+在 makefile 中會常看到 ```*, %, $@, $^, $<, $?``` 等這些符號，讓第一次接觸的人會不知道在幹什麼，所以就來說一下這些符號的意義。
+
+#### 1. ```*, %```
+```*``` 在一些腳本中代表 wildcard，也就是只關心其他部分。例如 ```*.c``` 就代表只關心副檔名為 .c 的文件，前面名字是什麼不在乎，所以就會把所有 .c 的文件找出來。而 %.c 則是會將檔名的包含 .c 的找出來。例如有以下檔案
+```
+main.c add.c divide.c integrad.c.cpp
+```
+*.c 只會找出前面三個，%.c 則是全都會找出來。當然一般情況下檔名只會有一個 .，所以這兩個是可以互相取代的。常搭配 ```$(wildcard *.c)``` 與 ```patsubst```，前面用來找出所有附檔名為 .c 的檔案，然後後面的函數將 .c 改為 .o。如果有很多的原始檔就可以用以下寫法
+```
+source := $(wildcard *.c)
+objects := $(patsubst %.c,%.o,$(wildcard *.c))
+
+run: $(objects)
+	gcc -o run $(objects)
+
+$(objects): $(source)
+	$(CC) -c $(source)
+
+clean:
+	rm *.o run
+```
+就會找出當前資料夾下所有的 .c/.o 檔並放進 SOURCE_FILES/OBJ_FILES 變數中。當然也可以用 *, % 改寫。
+
+#### 2.```$@, $^, $<, $?```
 第一次看到這東西應該滿多人以為是亂碼的，但這個在 makefile 中分別有以下意思
 1. $@  表示目標文件
 2. $^  表示所有的依賴文件
 3. $<  表示第一個依賴文件
 4. $?  表示比目標還要新的依賴文件列表\
-例如有個 makefile 內容為
+用那些符號就可以將上面的 makefile 改寫成
 ```
-all: main.o add.o divide.o
-	gcc -o calculate main.o hello.o hi.o
+objects := $(patsubst %.c,%.o,$(wildcard *.c))
 
-main.o: main.c
-	gcc -c main.c
+run: $(objects)
+	gcc -o $@ $^
 
-add.o: add.c
-	gcc -c add.c
+$(objects): %.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
 
-divide.o: divide.c
-	gcc -c divide.c
-
-.PHONY: clean
 clean:
-	rm *.o main
-```
-用那些符號就可以改寫成
-```
-all: main.o add.o divide.o
-	gcc -o calculate $@ $^
-
-main.o: main.c
-	gcc -c $<
-
-add.o: add.c
-	gcc -c $<
-
-divide.o: divide.c
-	gcc -c $<
-
-.PHONY: clean
-clean:
-	rm *.o main
+	rm *.o run
 ```
 
 ## 4. 流程
