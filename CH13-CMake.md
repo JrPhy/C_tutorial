@@ -48,7 +48,7 @@ Scanning dependencies of target server_thread
 [100%] Linking C executable server_thread
 [100%] Built target server_thread
 ```
-這樣就會在 build 目錄下生成 server_thread 與 client_thread 兩個執行檔。
+這樣就會在 build 目錄下生成 server_thread 與 client_thread 兩個執行檔。可以用 message() 函數來除錯。
 
 ## 2. CMakeList.txt
 主要由以下幾個部分組成，真正有作用的只有 ```add_executable(<name> <options>... <sources>...)```，會把原始碼編成執行檔，前面兩行皆可忽略，# 為註解。
@@ -164,7 +164,7 @@ set(SOURCE
     B.cpp)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb -D DEBUG")
 ```
-最後一行的寫法是因為我們有可能從外部傳入參數，{} 後面就是預設的，傳進去的選項就會加在預設選項之前。當然 CMake 中也有一些保留用的變數名稱，如 WIN32, APPLE, ANDROID 等常見的平台名稱，當然還有 CXX_FLAG 等。下方列出一些常用的變數
+最後一行的寫法是追加參數或是傳入參數，{} 後面就是預設的，這樣就可以一直把選項加進去，不用再去找到那段。當然 CMake 中也有一些保留用的變數名稱，如 WIN32, APPLE, ANDROID 等常見的平台名稱，當然還有 CXX_FLAG 等。下方列出一些常用的變數
 | 變數 | 用途 |
 | :--- | :--- |
 | PROJECT_NAME | 專案名 |
@@ -173,6 +173,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb -D DEBUG")
 | CMAKE_CURRRENT_BINARY_DIR | 所在的目錄 |
 | CMAKE_CURRENT_LIST_FILE | 當前 CMakeLists.txt 完整路徑 |
 
+也可以用 ${ENV_var} 來取得當前的環境變數。
 #### 1. 外部傳入
 cmake 也可以像 makefile 一樣傳入變數，來決定是要建置 debug 或 release，像上方的 ```set(CMAKE_BUILD_TYPE Debug)``` 就是要做這件事，再命令行執行 ```cmake -DCMAKE_BUILD_TYPE=Release ..``` 就可以了。還有像指定安裝位置也常用 ```CMAKE_INSTALL_PREFIX ```，當然更常是搭配 if 做使用。
 
