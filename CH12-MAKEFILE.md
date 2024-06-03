@@ -47,10 +47,10 @@ clean:
 	rm *.i *.s *.o
 ```
 ## 2. 變數
-在 makefile 中也可以自訂變數與呼叫變數，例如可以先把專案的絕對路徑設為一個變數，並用 $() 取得變數，之後再編譯的時候就不用寫的那麼長，或是也可以指定編譯器
+在 makefile 中也可以自訂變數與呼叫變數，例如可以先把專案的絕對路徑設為一個變數，並用 $() 取得變數，之後再編譯的時候就不用寫的那麼長，或是也可以指定編譯器。在 makefile 中因為保留的變數都是大寫，所以建議可以照著這規則，函數用小寫開頭。
 ```
 CC = gcc
-path=/home/user/project
+PATH=/home/user/project
 FLAG+= O3
 FLAG+= DEBUG
 default: main
@@ -121,14 +121,14 @@ main.c add.c divide.c integrad.c.cpp
 ```
 *.c 只會找出前面三個，%.c 則是全都會找出來。當然一般情況下檔名只會有一個 .，所以這兩個是可以互相取代的。常搭配 ```$(wildcard *.c)``` 與 ```patsubst```，前面用來找出所有附檔名為 .c 的檔案，然後後面的函數將 .c 改為 .o。如果有很多的原始檔就可以用以下寫法
 ```
-source := $(wildcard *.c)
-objects := $(patsubst %.c,%.o,$(wildcard *.c))
+SOURCE := $(wildcard *.c)
+OBJ := $(patsubst %.c,%.o,$(wildcard *.c))
 
-run: $(objects)
-	gcc -o run $(objects)
+run: $(OBJ)
+	gcc -o run $(OBJ)
 
-$(objects): $(source)
-	$(CC) -c $(source)
+$(OBJ): $(SOURCE)
+	$(CC) -c $(SOURCE)
 
 clean:
 	rm *.o run
@@ -143,12 +143,12 @@ clean:
 4. $?  表示比目標還要新的依賴文件列表\
 用那些符號就可以將上面的 makefile 改寫成
 ```
-objects := $(patsubst %.c,%.o,$(wildcard *.c))
+OBJ := $(patsubst %.c,%.o,$(wildcard *.c))
 
-run: $(objects)
+run: $(OBJ)
 	gcc -o $@ $^
 
-$(objects): %.o: %.c
+$(OBJ): %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
