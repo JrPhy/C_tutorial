@@ -48,7 +48,7 @@ Scanning dependencies of target server_thread
 [100%] Linking C executable server_thread
 [100%] Built target server_thread
 ```
-這樣就會在 build 目錄下生成 server_thread 與 client_thread 兩個執行檔。可以用 message() 函數來除錯。
+這樣就會在 build 目錄下生成 server_thread 與 client_thread 兩個執行檔。可以用 **message() **函數來除錯。
 
 ## 2. CMakeList.txt
 主要由以下幾個部分組成，真正有作用的只有 ```add_executable(<name> <options>... <sources>...)```，會把原始碼編成執行檔，前面兩行皆可忽略，# 為註解。
@@ -57,7 +57,7 @@ cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
 project(math) # 專案名稱
 add_executable(ex2 main.c add.c) # 把那些檔案編成執行檔
 ```
-當然也有可能有好幾個執行檔，可以參考 [tcpip repo](https://github.com/JrPhy/tcpip/blob/main/CMakeLists.txt)
+當然也有可能有好幾個執行檔，可以參考 [tcpip repo](https://github.com/JrPhy/tcpip/blob/main/CMakeLists.txt)。如果檔案很多，可以把原始碼放進 src 資料夾，並在該資料夾內另外寫一個 CMakeList.txt。或是使用 ```aux_source_directory(${PATH} SRC_FILES)```、```file(GLOB SRC_FILES "${PROJECT_SOURCE_DIR}/*.c")``` 來找出特定路徑下的原始檔放入 SRC_FILES 變數中，再利用 ```add_executable(ex2 ${SRC_FILES})``` 編成執行檔。
 
 ## 3. 編譯與連結函式庫
 在大型專案中有可能會將某個檔案編成函式庫或是使用第三方函式庫，cmake 中使用 ```add_library(<name> <SHARED|STATIC|MODULE|INTERFACE> <sources>...)``` 來將原始檔編成函式庫， STATIC 就是編成 .a， SHARED 編成 .so，其餘兩個不常用到。並利用 ```find_package``` 來連結第三方函式庫。
