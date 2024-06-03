@@ -60,7 +60,7 @@ main: main.i main.s main.o
 這樣在執行 ```make``` 時就會使用 gcc 編譯器，以及引入 project 下的 header 與 lib。
 
 #### 1. $(MAKE)
-在變數中有個特別的變數 $(MAKE)，可以算是 makefile 的保留字，常搭配 -C 這個選項，會進去子目錄中執行裡面的 makefile。在[文件](https://github.com/yyluoyong/Make-3.8-Chinese-Manuals/blob/master/main.pdf)中有個例子
+在變數中有個特別的變數 ```$(MAKE)```，可以算是 makefile 的保留字，常搭配 -C 這個選項，會進去子目錄中執行裡面的 makefile。在[文件](https://github.com/yyluoyong/Make-3.8-Chinese-Manuals/blob/master/main.pdf)中有個例子
 ```
 #maindir Makefile
 ...
@@ -83,7 +83,7 @@ make[1]: Entering directory `/.../ subdir '
 subdir makelevel = 1
 make[1]: Leaving directory `/.../ subdir '
 ```
-當專案夠大時就可以使用 $(MAKE) 變數來減少 makefile 寫的內容。
+當專案夠大時就可以使用 ```$(MAKE)``` 變數來減少 makefile 寫的內容。
 
 #### 2. 其他保留變數
 在 makefile 中把 ```$(CC)``` 保留給 gcc，```$(CXX)``` 保留給 g++，也有對應的 ```$(CFLAGS), $(CXXFLAGS)```，分別對應 gcc 與 g++ 的 flags，也就是 -o, -c -DDEBUG 這些選項。另外還有 ```$(OS)```，可以搭配 ifeq 拿來寫跨平台的 MAKEFILE。
@@ -154,7 +154,7 @@ $(OBJ): %.o: %.c
 clean:
 	rm *.o run
 ```
-```$(objects): %.o: %.c```是說目標從 $(objects) 獲取，%.o 表示以 .o 結尾的檔案，後面 %.c 則是依賴的檔案類型。下面一行的 $< 就是表示編成 .o 需要依賴 .c。若有四個檔案 main.c, foo.c, bar.c, add.c，那麼跑出的指令為
+```$(objects): %.o: %.c```是說目標從 ```$(objects)``` 獲取，```%.o``` 表示以 .o 結尾的檔案，後面 ```%.c``` 則是依賴的檔案類型。下面一行的 $< 就是表示編成 .o 需要依賴 .c。若有四個檔案 main.c, foo.c, bar.c, add.c，那麼跑出的指令為
 ```
 cc -c  foo.c -o foo.o
 cc -c  main.c -o main.o
@@ -195,7 +195,7 @@ ifndef CC
 	endif
 endif  # CC
 ```
-上面的寫法會先根據 $(OS) 來取得是在哪個平台，然後定義平台的名稱。因為不同平台常用的 C 編譯器也不一定相同，所以再根據平台去設定使用的 C 編譯器。
+上面的寫法會先根據 ```$(OS)``` 來取得是在哪個平台，然後定義平台的名稱。因為不同平台常用的 C 編譯器也不一定相同，所以再根據平台去設定使用的 C 編譯器。
 ## 5. 一些 flags
 | 多核編譯 -j | 指定跑哪個 makefile -f | 進入 sub_dir 去跑 makefile -C |
 | --- | --- | --- |
