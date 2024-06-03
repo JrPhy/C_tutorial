@@ -55,7 +55,7 @@ FLAG+= O3
 FLAG+= DEBUG
 default: main
 main: main.i main.s main.o
-	$(CC) -o main main.o $(FLAG) -I$(path)/include -L$(path)/lib
+	$(CC) -o main main.o $(FLAG) -I$(PATH)/include -L$(PATH)/lib
 ```
 這樣在執行 ```make``` 時就會使用 gcc 編譯器，以及引入 project 下的 header 與 lib。
 
@@ -67,14 +67,14 @@ main: main.i main.s main.o
 ...
 .PHONY :test
 test:
-@echo “main makelevel = $(MAKELEVEL)”
+@echo "main makelevel = $(MAKELEVEL)"
 @$(MAKE) –C subdir dislevel
 #subdir Makefile
 ...
 ...
 .PHONY : test
 test :
-@echo “subdir makelevel = $(MAKELEVEL)”
+@echo "subdir makelevel = $(MAKELEVEL)"
 ```
 執行的結果為
 ```
