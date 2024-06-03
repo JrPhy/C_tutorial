@@ -102,6 +102,7 @@ Scanning dependencies of target server_thread
 add_subdirectory(src)
 ```
 剩下的放進 src/CMakeLists.txt 中。這樣就會自動去跑 src 中的 CMakeLists.txt 了。\
+```
 tcpip/\
 ├── CMakeLists.txt\
 ├── Makefile\
@@ -116,6 +117,7 @@ tcpip/\
     ├── divide.c\
     └── server_thread.c\
 CMakeLists.txt
+```
 ```
 cmake_minimum_required(VERSION 3.16) # 決定 cmake 版本
 project(tcpip) # 專案名稱
@@ -235,4 +237,4 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)  # https://cmake.org/cmake/help/
   endif()
 endif()
 ```
-接著就去看是用哪個編譯器
+接著就去看是用哪個編譯器，並可利用 ```add_compile_options``` 來加入編譯選項
