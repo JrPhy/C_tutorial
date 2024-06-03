@@ -157,7 +157,6 @@ find_package(Threads REQUIRED)
 ## 4. 變數
 CMake 的變數常用在設定路徑與 FLAG，利用 set(name, value) 來宣告，${name} 來取值。如果有給 project({name}) 的話，那就可以用 ${PROJECT_NAME} 來取得專案名稱
 ```
-set(CMAKE_BUILD_TYPE Debug)
 set(SRC_DIR ${PROJECT_NAME}/src)
 set(LIB_DIR ${PROJECT_NAME}/libs)
 set(INC_DIR ${PROJECT_NAME}/include)
