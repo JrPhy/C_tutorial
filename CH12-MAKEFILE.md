@@ -4,16 +4,16 @@
 主要由 target 和 command 組成，target 有點類似函數，當我們下 make ${target} 時就會去執行這個 target 下的 command，註解為 **#**。
 ```
 target:
-    command 
+	command 
 # 不執行
 ```
 command 前面為 **tab**。target 通常會以要編成的檔案命名，例如有個 main.c，想要先編成 main.o 再編成 main，則寫成
 ```
 main: main.o
-    gcc -o main main.o
+	gcc -o main main.o
 
 main.o:
-    gcc -c main.c -o main.o
+	gcc -c main.c -o main.o
 ```
 而 target 後面也可以加上 dependency，有點類似函數中去呼叫另一個函數。在上述中 main 會先去呼叫 main.o 這個 target，執行完其 command 後再執行原本的 command，所以下了 ```make main``` 實際上的執行順序為
 ```
