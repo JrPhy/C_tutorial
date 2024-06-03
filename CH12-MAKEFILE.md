@@ -154,7 +154,14 @@ $(objects): %.o: %.c
 clean:
 	rm *.o run
 ```
-
+```$(objects): %.o: %.c```是說目標從 $(objects) 獲取，%.o 表示以 .o 結尾的檔案，後面 %.c 則是依賴的檔案類型。下面一行的 $< 就是表示編成 .o 需要依賴 .c。若有四個檔案 main.c, foo.c, bar.c, add.c，那麼跑出的指令為
+```
+cc -c  foo.c -o foo.o
+cc -c  main.c -o main.o
+cc -c  add.c -o add.o
+cc -c  bar.c -o bar.o
+gcc -o run foo.o main.o add.o bar.o
+```
 ## 4. 流程
 在 makefile 中有四種 if，結尾搭配 endif 來用
 | 關鍵字 | 用法 | 意思 |
