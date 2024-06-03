@@ -103,19 +103,19 @@ add_subdirectory(src)
 ```
 剩下的放進 src/CMakeLists.txt 中。這樣就會自動去跑 src 中的 CMakeLists.txt 了。\
 ```
-tcpip/\
-├── CMakeLists.txt\
-├── Makefile\
-├── README.md\
-├── build\
-├── include\
-│   └── add.h\
-└── src\
-    ├── CMakeLists.txt\
-    ├── add.c\
-    ├── client_thread.c\
-    ├── divide.c\
-    └── server_thread.c\
+tcpip/
+├── CMakeLists.txt
+├── Makefile
+├── README.md
+├── build
+├── include
+│   └── add.h
+└── src
+    ├── CMakeLists.txt
+    ├── add.c
+    ├── client_thread.c
+    ├── divide.c
+    └── server_thread.c
 CMakeLists.txt
 ```
 ```
