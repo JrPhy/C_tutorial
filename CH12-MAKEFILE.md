@@ -102,12 +102,12 @@ make[1]: Leaving directory `/.../ subdir '
 makefile 也支援從命令行傳參數進去，例如我們想要從外面決定是否要開啟 DEBUG
 ```
 CC := gcc
-path := /home/user/project
+PATH := /home/user/project
 FLAG += O3
 DEBUG =
 default: main
 main: main.i main.s main.o
-	$(CC) $(DEBUG) -o main main.o $(FLAG) -I$(path)/include -L$(path)/lib
+	$(CC) $(DEBUG) -o main main.o $(FLAG) -I$(PATH)/include -L$(PATH)/lib
 ```
 執行 make DEBUG = -DDEBUG 就可以把 -DDEBUG 放入 DEBUG 中，沒有傳的話就不開這選項。
 
