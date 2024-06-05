@@ -163,7 +163,7 @@ cc -c  bar.c -o bar.o
 gcc -o run foo.o main.o add.o bar.o
 ```
 ## 4. 流程
-在 makefile 中有四種 if，結尾搭配 endif 來用
+在 makefile 中有四種 if，結尾搭配 endif 來用，且第一層 if 陳述句**前面不能有 tab**
 | 關鍵字 | 用法 | 意思 |
 | --- | --- | --- |
 | ifeq | ifeq(A, B) | 兩者**相同**為 true |
