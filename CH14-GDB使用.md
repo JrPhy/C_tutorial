@@ -38,7 +38,7 @@ Num     Type           Disp Enb Address            What
 2       breakpoint     keep y   0x000055555555544d in deleteNode at main.c:88
 (gdb)
 ```
-
+## 3. 進入 DEBUG
 ```
 Temporary breakpoint 1 at 0x117f: file main.c, line 6.
 Starting program: /home/ubuntu/maketest/run
@@ -46,11 +46,52 @@ Starting program: /home/ubuntu/maketest/run
 Temporary breakpoint 1, main () at main.c:6
 6       int main() {
 ```
-這時候程式就停在 main 函數了。這時可以使用下列指令
+這時候程式就停在 main 函數了。這時可以使用下列指令繼續往下或看程式碼
+| c/continue | n/next | s/step | l/list (m, n) |
+| --- | --- | --- | --- |
+| 到下個中斷點或結束 | 下一行，不進入函數調用 | 下一行，進入函數調用 | 顯示當前行前後的程式碼 |
 ```
-(gdb) c/continue        # 到下個中斷點或結束
-(gdb) n/next            # 下一行，不進入函數調用
-(gdb) s/step            # 下一行，進入函數調用
-(gdb) b/break line/func # 在某行或某個函數設中斷點
-(gdb) l                 # 顯示當前行前後的程式碼
+(gdb) n
+24              list = list->next;
+(gdb) n
+21          while(list != NULL)
+(gdb) l
+16          return tmpNode;
+17      }
+18
+19      void printList(node *list)
+20      {
+21          while(list != NULL)
+22          {
+23              printf("%d->", list->data);
+24              list = list->next;
+25          }
+(gdb)
+```
+可以利用下列指令來查看變數
+| print/display {var} | ptype | explore |
+| --- | --- | --- |
+| 值 | 變數型別 | 詳細變數內容 |
+```
+(gdb) print list->data
+$1 = 4
+(gdb) ptype list
+type = struct _node {
+    int data;
+    struct _node *next;
+} *
+(gdb) explore list
+'list' is a pointer to a value of type 'node'
+Continue exploring it as a pointer to a single value [y/n]: y
+The value of '*list' is of type 'node' which is a typedef of type 'struct _node'
+The value of '*list' is a struct/class of type 'struct _node' with the following fields:
+
+  data = 4 .. (Value of type 'int')
+  next = <Enter 1 to explore this field of type 'struct _node *'>
+```
+如果說專案很大的話，可以用 bt/backtrace 來查看 callstack
+```
+(gdb) bt
+#0  printList (list=0x555555559710) at main.c:23
+#1  0x000055555555556b in main () at main.c:119
 ```
