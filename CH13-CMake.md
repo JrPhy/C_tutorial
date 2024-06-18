@@ -101,9 +101,9 @@ Scanning dependencies of target server_thread
 ```
 add_subdirectory(src)
 ```
-剩下的放進 src/CMakeLists.txt 中。這樣就會自動去跑 src 中的 CMakeLists.txt 了。\
+剩下的放進 src/CMakeLists.txt 中。這樣就會自動去跑 src 中的 CMakeLists.txt 了。
 ```
-tcpip/
+tcpip
 ├── CMakeLists.txt
 ├── Makefile
 ├── README.md
@@ -182,7 +182,8 @@ cmake 也可以像 makefile 一樣傳入變數，來決定是要建置 debug 或
 在建置好之後就開始編譯，編譯後的檔案通常會希望放在另外的地方，至少要跟原始碼分開放，所以一個大型專案會在分出以下資料夾
 | src | bin | lib | include |
 | --- | --- | --- | --- |
-| 原始碼 | 執行檔 | .a, .so | header |\
+| 原始碼 | 執行檔 | .a, .so | header |
+
 在最後使用 install，然後執行 make install 就會把那些檔案搬移到指定位置
 ```
 install(TARGETS server_thread client_thread add divide
