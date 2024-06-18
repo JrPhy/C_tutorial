@@ -10,13 +10,13 @@ void swap1(int a, int b) {int temp = a; a = b, b = temp;}
 void swap2(int *a, int *b) {int temp = *a; *a = *b, *b = temp;}
 int main()
 {
-	int a = 1, b = 2, *pa = &a, *pb = &b;
-	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-	swap1(a, b);    //不改變 :)
-	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-	swap2(&a, &b);  //a, b 值會改變
-	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-	return 0;
+    int a = 1, b = 2, *pa = &a, *pb = &b;
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    swap1(a, b);    //不改變 :)
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    swap2(&a, &b);  //a, b 值會改變
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    return 0;
 }
 ```
 依照此想法，若想改變指標的指向該物件的值，那麼可以傳入一個指標的指標。
@@ -25,11 +25,11 @@ int main()
 void swap(int**p1 ,int **p2) {int* temp; temp = *p1; *p1 = *p2; *p2 = temp;}
 int main()
 {
-	int a = 1, b = 2, *pa = &a, *pb = &b;
-	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-	swap(&pa, &pb);//pa, pb 值會改變，但 a, b 值不會改變
-	printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
-	return 0;
+    int a = 1, b = 2, *pa = &a, *pb = &b;
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    swap(&pa, &pb);//pa, pb 值會改變，但 a, b 值不會改變
+    printf("%d, %d, %d, %d\n", a, b, *pa, *pb);
+    return 0;
 }
 ```
 ## 2. 函數回傳指標
@@ -108,8 +108,8 @@ typedef 型別 別名;
 typedef unsigned int uint;//把無號整數的這個型別給了一個別名叫做 uint
 typedef struct data 
 {
-	int id;
-	float score;
+    int id;
+    float score;
 }result;                //把這個結構體的型別給了一個別名叫做 result
 typedef static int sint; //會報錯
 typedef const int* rv;   //把這個唯讀整數指標的型別給了一個別名叫做 rv
@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
 extern "C" {
 void bejo_lib(char *name, int i)
 {
-	printf("I am %s, do i=%d\n", name, i);
+    printf("I am %s, do i=%d\n", name, i);
 }
 }
 使用 dlfnc 時一定要有 extern "C"
