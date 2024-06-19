@@ -47,12 +47,12 @@ clean:
 	rm *.i *.s *.o
 ```
 ## 2. 變數
-在 makefile 中也可以自訂變數與呼叫變數，例如可以先把專案的絕對路徑設為一個變數，並用 $() 取得變數，之後再編譯的時候就不用寫的那麼長，或是也可以指定編譯器。在 makefile 中因為保留的變數都是大寫，所以建議可以照著這規則，函數用小寫開頭。
+在 makefile 中也可以自訂變數與呼叫變數，例如可以先把專案的絕對路徑設為一個變數，並用 $() 取得變數，$$() 取得 LINUX SHELL 中的環境變數，如 $$(pwd) 等，之後再編譯的時候就不用寫的那麼長，或是也可以指定編譯器。在 makefile 中因為保留的變數都是大寫，所以建議可以照著這規則，函數用小寫開頭。
 ```
 CC = gcc
-PATH=/home/user/project
-FLAG+= O3
-FLAG+= DEBUG
+PATH = $$(pwd)
+FLAG+ = O3
+FLAG+ = DEBUG
 default: main
 main: main.i main.s main.o
 	$(CC) -o main main.o $(FLAG) -I$(PATH)/include -L$(PATH)/lib
