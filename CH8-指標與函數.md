@@ -67,7 +67,7 @@ C 語言雖然不是物件導向的語言(Object-Oriented Programming Language, 
 ```C
 int compare(const void * a, const void * b)
 {
-    return *(int *)a > *(int *)b ? 1 : -1;
+    return ( *(int*)a - *(int*)b );
 }
 
 void qsort(void* base, size_t nitems, size_t size, int (*compare)(const void*, const void*));
@@ -90,12 +90,9 @@ void* bsearch (const void* key, const void* base, size_t num, size_t size, int (
 若是 qsort 函數原型寫成以下形式且用以下使用方式，則為傳入一個整數而非函數。
 ```C
 int compare(const void * a, const void * b)
-{
-    return *(int *)a > *(int *)b ? 1 : -1;
-}
+{return ( *(int*)a - *(int*)b );}
 
-void qsort(void* base, size_t nitems, size_t size, int compare);
-qsort(base, nitems, size, compare(const void * a, const void * b));
+qsort(base, nitems, size, compare);
 //等同於 qsort(base, nitems, size, 1); or qsort(base, nitems, size, -1); 
 ```
 雖然看起來像是傳入函數，但實際上 base 裡面的物件丟進 compare 函數裡面，可能回傳 1 也可能是 -1，此種寫法只能在 qsort 函數外面做比較，而非在 qsort 函數裡面做比較。\
