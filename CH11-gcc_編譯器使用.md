@@ -22,7 +22,7 @@ gcc -o main main.c add.c
 除了標準函式庫以外，也常常用到別人的函式庫，就會有許多 .h, .o, .a(靜態函式庫), .so(動態函式庫)，這時就需要使用其他選項將他們編進執行檔中。除了自己寫的 main 與 add 外，還用到別人寫的 divide。gcc/g++ 中 -I 來指定要引入的 header，-l 來指定要引入的 .a，或是 -L(path) 來引入該 path 中的 lib 檔 (-I/-L 與檔案間沒有空格)。通常編成 .a 或 .so 前面會多個 lib，例如 libdivide.a 或是 libdivide.so，在編譯時寫其原本的名稱或是全名皆可。
 ```
 gcc -o calculate add.c main.c -I./divide.h -L -ldivide
-gcc -o calculate add.c main.c -I./divide.h libdivide.so
+gcc -o calculate add.c main.c -I./divide.h libdivide.a
 ```
 
 #### 1. 靜態函式庫 .a
