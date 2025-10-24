@@ -35,8 +35,7 @@ ptr = (int *)0x67a9; // 這個指標的位置是 0x67a9，因為是指標，所�
 #### 1. 結構/聯合內的指標
 ```C
 n = 1;
-struct p 
-{
+struct p {
     int *a;
 }test;
 test.a = &n;
@@ -49,8 +48,7 @@ printf("%d, %d\n", *(test.a), n);
 #### 2. 指標結構
 指標也可以指向一個結構，若有一個指向結構的指標 A 與一個結構 B，則需先將 A 指向 B 後才能取用內部成員
 ```C
-struct p
-{
+struct p {
     char a;
 }*test1, test2;
 test2.a = 10;
@@ -68,8 +66,7 @@ a->b->c->d
 #### 3. 指向結構的指標內有指標變數
 綜合上面兩種寫法，若是一個指向結構內的指標中的成員為指標，寫法如下
 ```C
-struct p
-{
+struct p {
     int *x;
 }*ptr, pp;
 int a = 5, b = 10;
@@ -120,14 +117,13 @@ C 語言雖然不是物件導向的語言，也就是**沒有內建**物件導�
 ```C
 #include <stdlib.h>
 
-int compare(const void * a, const void * b)
-{
+int compare(const void * a, const void * b) {
     return *(int *)a - *(int *)b;
     //> 0 升序，< 0 降序
     //else return -1;
 }
 
-int main(){
+int main() {
     int values[] = {-1, 3, 40, 3, -6, -13, -7, 0, 11, -5};
     int *pItem, key = 40, *ip, elem;
     qsort(values, 10, sizeof(int), compare);
@@ -160,24 +156,20 @@ C 語言並沒有像其他高階語言一樣不用管記憶體，但這也是 C 
 ```C
 int *p = calloc(1000, sizeof(int));
 //似 int p[1000] = {0};
-if (p == NULL)
-{
+if (p == NULL) { // 也可寫成 if (!p)
     puts("Memory allocation failed.");  //可能是記憶體不足
     exit(EXIT_FAILURE);  //直接中斷程式，不會進行 free
 }
 free(p);
 
 int **p = calloc(1000, sizeof(int*)); 
-if (p == NULL)
-{
+if (p == NULL) { // 也可寫成 if (!p)
     puts("Memory allocation failed.");  //可能是記憶體不足
     exit(EXIT_FAILURE);  //直接中斷程式，不會進行 free
 }
-for(int i = 0; i < 2; i++) 
-{
+for(int i = 0; i < 2; i++) {
     p[i] = calloc(2, sizeof(int));
-    if (p == NULL)
-    {
+    if (p == NULL) {
         puts("Memory allocation failed.");  //可能是記憶體不足
         exit(EXIT_FAILURE);  //直接中斷程式，不會進行 free
     }
@@ -217,18 +209,15 @@ p1++;         // p1 移動到 a[1]
 ```
 以上可知陣列可以使用指標操作，且指標指向陣列時是指向陣列的第一個元素。
 ```C
-struct test
-{
+struct test {
     int arr[3];
 };
 
-void f(struct test a)
-{
+void f(struct test a) {
     a.arr[1] = 0;
 }
 
-int main()
-{
+int main() {
     struct test b = {1, 2, 3};
     f(b);
     printf("%d", b.arr[1]);  // 2
