@@ -9,15 +9,13 @@ C 語言中的範圍總共有以下四個
 若一個變數在函數以外，稱為全域變數(global variable)，反之則稱為區域變數(local variable)
 ```C
 int a; // 全域變數
-swapi(int *a, int *b)
-{
+swapi(int *a, int *b) {
     int temp = *a; //區域變數
     *a = *b;
     *b = temp;
 }
 
-swapf(float *a, float *b)
-{
+swapf(float *a, float *b) {
     float temp = *a; //區域變數
     *a = *b;
     *b = temp;
@@ -27,8 +25,7 @@ swapf(float *a, float *b)
 ```C
 int a = 4, b = 4; //全域變數
 printf("%d, %d\n", a, b); //4, 4
-int main()
-{
+int main() {
     int a = 1, b = 1; //區域變數
     {
         int b = 2; //區域變數
@@ -51,7 +48,7 @@ void test(void)
 void test1(int k)
 { printf("%d\n", k); }
 
-int main(){
+int main() {
     int k = 0; //區域變數
     test();   // 5
     test1(k); // 0
@@ -65,8 +62,7 @@ int main(){
 int sum = 0;
 for (int i = 0; i < 10; i++) sum += i;
 
-for (int i = 0; i < 10; i++) 
-{
+for (int i = 0; i < 10; i++) {
     if (i == 5) printf("%d\n", i);
     else printf("%d ", i);
 }
@@ -111,12 +107,10 @@ C11 中提供了 Thread.h 這個標頭檔讓程式設計者可以更方便的使
 int a = 5; //預設是 extern，但若是要與其他檔案共用，建議還是加上 extern 關鍵字
 static int b = 3; //只能在此檔案中使用
 static int count(int a, int b); //只能在此檔案中使用
-int main()
-{
+int main() {
       ...
 }
-static int count(int a, int b)
-{
+static int count(int a, int b) {
     static int c = 0; //生命週期與 a, b 相同
     return c;
 }
@@ -129,8 +123,7 @@ int count = 10;
 ```
 main.c
 ```C
-int main()
-{
+int main() {
     extern int count; //告訴編譯器在其他 .c 檔案中有相同名稱的變數且使用那個
     count++;
     return 0
@@ -145,8 +138,7 @@ int main()
 當此關鍵字修飾指標值，則表示該指標位置不能被改變。而指標也可以取值，所以此關鍵字的用法如下
 ```C
 static const int c_vacuum = 299792458; // m/s
-int main()
-{
+int main() {
     const int d = 10; //此變數的值在其生命週期內不能改變
     c_vacuum = 3e8; //會報錯
     int a = 10, b = 15;
